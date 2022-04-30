@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <title>Notice Board</title>
+		<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+		<link rel="stylesheet" href="/static/css/header.css">
+		<link rel="stylesheet" href="/static/css/loading.css">
+	</head>
+
+	{% block head %}{% endblock %}
+
+	<style>
+		body{
+			background-image: url("/static/images/background.jpg");
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: cover;
+			font-family: 'Roboto', sans-serif;
+			caret-color: rgba(0,0,0,0);
+		}
+		body::-webkit-scrollbar {
+			display: none;
+		}
+		.header button:not(.dropdown_option):hover{
+        	filter:brightness(0.5);
+		}
+		.wrapper button:hover{
+        	filter:brightness(0.95);
+    	}
+	</style>
+
+	{% block style %}{% endblock %}
+	
+	<body>
+		<div class="loading"></div>
+	    {% block content %}{% endblock %}
+	</body>
+
+	<script src="/static/js/loading.js"></script>
+    {% block script %}{% endblock %}
+
+</html>

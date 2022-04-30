@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block script %}
+<script src="/static/js/slideshow.js"></script>
+<script src="/static/js/dropdown_menu.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+    .wrapper{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        justify-items: center;
+        gap: 20px;
+        margin: 60px 100px 40px 100px;
+        padding: 60px 60px 60px 60px;
+
+        border-radius:10px;
+        background-color: rgba(255, 255, 255, 0.3);
+
+        box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
+    }
+    .wrapper button{
+        background:none;
+        cursor: pointer;
+        border:none;
+    }
+    .wrapper img{
+        border-radius: 5px;
+        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
+    } 
+    .item h3{
+        text-align: center;
+        color:black;
+    }
+    .dropdown{
+        display:none;
+        z-index:1;
+        position: absolute; 
+        border: 1px solid #c2c2c2;
+        border-radius:10px;
+        left: 250px;
+        background-color:white;
+    }
+    .dropdown h3{
+        position:relative;
+        font-size:20px;
+        text-align:left;
+        bottom:7px;
+    }
+    .dropdown button{
+        cursor: pointer;
+        border-radius:5px;
+        margin: 10px 10px 10px 10px;
+        min-width: 100px;
+        max-height: 50px;
+    }
+    .dropdown button:hover{
+        background-color: #e9e9e9;
+    }
+    .slideshow{
+        z-index:2;
+        display:none;
+    }
+    .slideshow img{
+        border-radius: 5px;
+        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
+        height:90vh;
+    }
+    .slide{
+        display:none;
+        position:fixed;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="slideshow">
+    {% for item in items %}
+        <img class="slide" src="/static/upload/{{folder}}/{{item.name}}">
+    {% endfor %}
+</div>
+
+<form class="content" action="/folder" method="post">
+    <div class="header">
+        <h1>{{folder}}</h1>
+        <div class="buttons">
+            <button type="submit" name="back"><i class="bi bi-arrow-left"></i></button>
+
+            <button type="button" onclick="dropdown()" name="sort"><i class="bi bi-sort-down"></i></button>
+            <div id="dropdown" class="dropdown">
+                <button class="dropdown_option" onclick="disableButton()" type="submit" style="margin-bottom:5px;" name="name_button" value="{{folder}}" title="sort by name"><h3>Name</h3></button>
+                <br>
+                <button class="dropdown_option" onclick="disableButton()" type="submit" style="margin-top:5px;" name="date_button" value="{{folder}}" title = "sort by date"><h3>Date</h3></button>
+            </div>
+
+            <button type="submit" name="attendance" value="{{folder}}"><i class="bi bi-people"></i></i></button>
+            <button type="submit" name="reload" value="{{folder}}" onclick="disableButton()"><i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        {% for item in items %}
+        <div class = "item">
+            <button type="submit" name="item" value="{{folder}}/{{item.name}}"><img src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}"></button>
+            <h3>{{item.text}}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</form>
+{% endblock %}

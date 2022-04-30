@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block script %}
+<script src="/static/js/popup.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+    .popup {
+        z-index:1;
+        display: none;
+        position:fixed;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-60%);
+        width:300px;
+        height:250px;
+    }
+    .containers {
+        display: grid;
+
+        justify-items: center;
+        gap:20px;
+        grid-template-columns: repeat(3, 1fr);
+        
+        margin: auto;
+        margin-top: 60px;
+        padding: 60px 60px 60px 60px;
+        width: 800px;
+        
+        border-radius:10px;
+        background-color: rgba(255, 255, 255, 0.3);
+
+        box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
+    }
+    .input_wrapper {
+
+        width:250px;
+        border-radius:10px;
+        padding: 25px 25px 25px 25px;
+        background-color: white;
+        box-shadow: 0px 0px 2px rgba(0,0,0,0.3);
+    }
+    .popup_wrapper {
+        display:grid;
+        border-radius:10px;
+        padding: 25px;
+        background-color: white;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+    }
+    .popup_buttons button {
+        height:35px;
+        width:100px;
+        color:white;
+        border-radius: 10px;
+        box-shadow:0px 0px 7px rbga(0,0,0,0.3);
+        border:none;
+        font-weight:bold;
+        margin: 0px 10px 0px 10px;
+        font-size:17px;
+        width:100px;
+    }
+    button:hover {
+        cursor: pointer;
+        filter:brightness(0.95);
+    }
+    .containers h1, h4 {
+        text-align: center;
+        padding-bottom:20px;
+    }
+    .popup h3 {
+        text-align: center;
+        padding-bottom:20px;
+    }
+    .number_input input {
+        height: 30px;
+        width: 240px;
+        border-radius: 5px;
+        border: 1px solid rgb(203, 203, 203);
+        padding-left:10px;
+        font-size:18px;
+    }
+    .number_input input:focus {
+        border: 1px solid rgb(135, 135, 135);
+        outline: none;
+    }
+    .number_input label{
+        position: relative;
+        bottom:5px;
+        font-size:15px;
+    }
+    .button_input input, .button_input button {
+        height:35px;
+        width:100px;
+        border-radius:10px;
+        color:white;
+        font-weight:bold;
+        border:none;
+        background-color: #91bcf5;
+    }
+    .button_input input:hover {
+        filter:brightness(0.95);
+    }
+    .button_input button, .button_input input {
+        cursor: pointer;
+        font-size:15px;
+    }
+    .button_input button{
+        background-color: #ec9b9b;
+    }
+    .grid-container {
+        display:grid;
+        justify-self:end;
+        gap:10px;
+        height:0px;
+    }
+    .text_wrapper{
+        padding: 10px;
+        width:175px;
+        height:20px;
+        border-radius:10px;
+        box-shadow: 0px 0px 2px rgba(0,0,0,0.3);
+        background-color: white;
+        position:relative;
+        margin:none;
+    }
+    .error{
+        color:#cf6262;
+        font-size:15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<form class="content" action="" method="post" novalidate>
+    <div class="header">
+        <h1>Attendance</h1>
+        <div class="buttons">
+            <button type="submit" name="back" value="{{congregation}}"><i class="bi bi-arrow-left"></i></button>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup_wrapper">
+            <h3>Are you sure you want to clear all attendance data?</h3>
+            <div class = "popup_buttons">
+                <button type="submit" style="background-color:#a6dd84;" name="clear_attendance" value="{{congregation}}">Yes</button>
+                <button type="button" style="background-color:#ec9b9b;" onclick="clearPopup()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="containers">
+        {% include "./components/numpad.html" %}
+        
+        <div class="input_wrapper">
+            <h1>Add</h1>
+            {{ form.hidden_tag() }}
+            <div class="number_input">
+
+                {{ form.attendance(class="input_box", value="0", autocomplete="off", placeholder="0") }}
+                {% for error in form.attendance.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="button_input">
+                {{ form.submit() }}
+                <button style="float:right" type="button" onclick="showPopup()" name="clear">Clear</button>
+            </div>
+        </div>
+
+        <div class="grid-container">
+            {% for entry in attendance_data %}
+                <div class="text_wrapper">
+                    {{ entry.weekday }} {{ entry.day }}: {{ entry.attendance_number }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</form>
+{% endblock %}

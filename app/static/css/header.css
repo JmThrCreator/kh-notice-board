@@ -1,0 +1,25 @@
+.header h1{
+    margin-top: 60px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.header .buttons {
+    position: absolute;
+    display:flex;
+    gap:50px;
+    top:40px;
+    left:40px;
+}
+.header .buttons button{
+    margin: none;
+    border:none;
+    width:70px;
+    height:70px;
+    background-color: transparent;
+}
+.header i{
+    font-size: 70px;
+    color: #000000;
+    cursor: pointer;
+}

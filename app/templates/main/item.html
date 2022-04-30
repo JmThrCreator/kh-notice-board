@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block script %}
+<style>
+    .header button{
+        z-index: 1;
+        position: fixed;
+    }
+    .wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        gap:60px;
+        margin: 60px 20px 60px 20px;
+    }
+    .wrapper button{
+        background:none;
+        cursor: pointer;
+        border:none;
+    }
+    .wrapper img{
+        border-radius: 5px;
+        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<form action="/item" method="post">
+    <div class="header">
+        <div class="buttons">
+            <button type="submit" name="back" value="{{folder}}"><i class="bi bi-arrow-left"></i></button>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        {% for item in items %}
+            <img src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}">
+        {% endfor %}
+    </div>
+</form>
+{% endblock %}
