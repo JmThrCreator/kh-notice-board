@@ -1,0 +1,9 @@
+flask
+pipenv
+pillow
+pdf2image
+configobj
+flask-wtf
+flask-sqlalchemy
+flask-migrate
+flask-admin
