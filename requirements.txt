@@ -1,5 +1,5 @@
 flask
-pipenv
+python-dotenv
 pillow
 pdf2image
 configobj
