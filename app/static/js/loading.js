@@ -1,20 +1,24 @@
 // loading spinner
 
-var clickCount = 0;
+var clicked = false;
 
-function disableButton() {
+function disableButton(id) {
+
     loading();
     
-    if (clickCount == 1){
-        var elements = document.getElementsByClassName("button");
-        for(var i = 0; i < elements.length; i++) {
-            elements[i].disabled = true;
-        }
+    var elements = document.getElementsByTagName("button");
+
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].id === id) ;
+        else (elements[i].disabled = true);
+    } 
+
+    if (clicked === true) {
+        document.getElementById(id).disabled = true;
     }
-    else {
-        ;
-    }
-    clickCount += 1
+
+    clicked = true;
+
 }
 
 function loading(){

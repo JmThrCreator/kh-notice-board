@@ -39,7 +39,7 @@
         position: absolute; 
         border: 1px solid #c2c2c2;
         border-radius:10px;
-        left: 250px;
+        left: 210px;
         background-color:white;
     }
     .dropdown h3{
@@ -90,15 +90,15 @@
         <div class="buttons">
             <button type="submit" name="back"><i class="bi bi-arrow-left"></i></button>
 
-            <button type="button" onclick="dropdown()" name="sort"><i class="bi bi-sort-down"></i></button>
+            <button type="button" onClick="dropdown()" name="sort"><i class="bi bi-sort-down"></i></button>
             <div id="dropdown" class="dropdown">
-                <button class="dropdown_option" onclick="disableButton()" type="submit" style="margin-bottom:5px;" name="name_button" value="{{folder}}" title="sort by name"><h3>Name</h3></button>
+                <button class="dropdown_option" id="name_button" onClick="disableButton(this.id)" type="submit" style="margin-bottom:5px;" name="name_button" value="{{folder}}" title="sort by name"><h3>Name</h3></button>
                 <br>
-                <button class="dropdown_option" onclick="disableButton()" type="submit" style="margin-top:5px;" name="date_button" value="{{folder}}" title = "sort by date"><h3>Date</h3></button>
+                <button class="dropdown_option" id="date_button" onClick="disableButton(this.id)" type="submit" style="margin-top:5px;" name="date_button" value="{{folder}}" title = "sort by date"><h3>Date</h3></button>
             </div>
 
             <button type="submit" name="attendance" value="{{folder}}"><i class="bi bi-people"></i></i></button>
-            <button type="submit" name="reload" value="{{folder}}" onclick="disableButton()"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="submit" name="reload" value="{{folder}}" onClick="disableButton(this.id)" id="reload"><i class="bi bi-arrow-clockwise"></i></button>
         </div>
     </div>
 
