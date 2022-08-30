@@ -2,9 +2,6 @@
 
 An easy to-set-up notice board that can display PDF and JPEG files and manage attendance.
 
-<img src="http://drive.google.com/uc?export=view&id=1me_YWmpjJRJJaFQNnrLy0wR35nFWFG7K" width="40%"> <img src="http://drive.google.com/uc?export=view&id=1fHR45wkBfhtP5kGmhpJAxmKM_AY4woBK" width="40%">
-<img src="http://drive.google.com/uc?export=view&id=1llz6dIgOI4F_p48fxJWFidIb_bKwLL6A" width="40%"> <img src="http://drive.google.com/uc?export=view&id=1pJgaaU4jiX0Zm1mQHQ45jaqEtzalAo4K" width="40%">
-
 ## Setup
 
 Create a virtual environment and install the dependencies using the following commands:
