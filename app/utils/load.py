@@ -2,7 +2,7 @@ import os, shutil, PIL
 from shutil import copy2
 from pdf2image import convert_from_path
 from app.utils.info import source_folder, destination_folder
-from app.utils.sort import sort_by_date, sort_by_name, sort_by_order
+from app.utils.sort import sort_by_date, sort_by_order
 from config import basedir
 
 # copies folders into destination folder
@@ -112,9 +112,7 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
 
     # sorts items by date, name, or order
     if sort_by == "date":
-        items = sort_by_date(items, folder, destination_folder)
-    elif sort_by == "name":
-        items = sort_by_name(items)
+        items = sort_by_date(items, folder)
     elif sort_by == "order":
         items = sort_by_order(items)
 
