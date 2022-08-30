@@ -1,9 +1,9 @@
 # KH Notice Board
 
-![Index](https://github.com/JmThrCreator/kh-notice-board/tree/master/github/image_1.PNG)
-![Folder](https://github.com/JmThrCreator/kh-notice-board/tree/master/github/image_2.PNG)
-![File](https://github.com/JmThrCreator/kh-notice-board/tree/master/github/image_3.PNG)
-![Attendance](https://github.com/JmThrCreator/kh-notice-board/tree/master/github/image_4.PNG)
+![Index](https://raw.githubusercontent.com/JmThrCreator/kh-notice-board/master/github/image_1.PNG)
+![Folder](https://raw.githubusercontent.com/JmThrCreator/kh-notice-board/master/github/image_2.PNG)
+![File](https://raw.githubusercontent.com/JmThrCreator/kh-notice-board/master/github/image_3.PNG)
+![Attendance](https://raw.githubusercontent.com/JmThrCreator/kh-notice-board/master/github/image_4.PNG)
 
 An easy to-set-up notice board that can display PDF and JPEG files and manage attendance.
 
