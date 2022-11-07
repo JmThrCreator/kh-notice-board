@@ -1,7 +1,7 @@
 from app.main import bp
 from app import db
 from flask import render_template, redirect, request, url_for
-from app.utils.load import load_folders, get_folders, get_items
+from app.utils.load import load_folders, load_folder, get_folders, get_items
 from app.main.forms import Attendance as AttendanceForm
 from app.models import Attendance as AttendanceModel
 from datetime import date
@@ -45,8 +45,9 @@ def folder(folder=None, sort="date"):
         elif "attendance" in request.form:
             congregation = request.form.get("attendance")
             return redirect(url_for("main.attendance", congregation=congregation))
-        elif "reload" in request.form:
-            folder = request.form.get("reload")
+        elif "reset" in request.form:
+            folder = request.form.get("reset")
+            load_folder(folder)
             return redirect(url_for("main.folder", folder=folder, sort="date"))
         elif "item" in request.form:
             path = request.form.get("item")

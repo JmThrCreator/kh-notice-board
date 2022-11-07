@@ -1,10 +1,8 @@
 window.onclick = function(event) {
-    var targetClass = event.target.className;
-    if (targetClass == "numpad") {
+    var targetId = event.target.id;
+    if (targetId == "numpad") {
         inputValue = event.target.value;
-
-        value = document.getElementsByClassName("input_box")[0].value;
-        console.log(value)
+        value = document.getElementById("input_box").value;
         if (inputValue == "backspace") {
             value = value.slice(0, -1);
         }
@@ -14,6 +12,6 @@ window.onclick = function(event) {
         else {
             value = value.concat(inputValue);
         }
-        document.getElementsByClassName("input_box")[0].value = value;
+        document.getElementById("input_box").value = value;
     } 
 }

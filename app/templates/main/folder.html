@@ -1,114 +1,73 @@
 {% extends "base.html" %}
 
 {% block script %}
-<script src="/static/js/slideshow.js"></script>
-<script src="/static/js/dropdown_menu.js"></script>
-{% endblock %}
-
-{% block style %}
-<style>
-    .wrapper{
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        justify-items: center;
-        gap: 20px;
-        margin: 60px 100px 40px 100px;
-        padding: 60px 60px 60px 60px;
-
-        border-radius:10px;
-        background-color: rgba(255, 255, 255, 0.3);
-
-        box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
-    }
-    .wrapper button{
-        background:none;
-        cursor: pointer;
-        border:none;
-    }
-    .wrapper img{
-        border-radius: 5px;
-        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
-    } 
-    .item h3{
-        text-align: center;
-        color:black;
-    }
-    .dropdown{
-        display:none;
-        z-index:1;
-        position: absolute; 
-        border: 1px solid #c2c2c2;
-        border-radius:10px;
-        left: 210px;
-        background-color:white;
-    }
-    .dropdown h3{
-        position:relative;
-        font-size:20px;
-        text-align:left;
-        bottom:7px;
-    }
-    .dropdown button{
-        cursor: pointer;
-        border-radius:5px;
-        margin: 10px 10px 10px 10px;
-        min-width: 100px;
-        max-height: 50px;
-    }
-    .dropdown button:hover{
-        background-color: #e9e9e9;
-    }
-    .slideshow{
-        z-index:2;
-        display:none;
-    }
-    .slideshow img{
-        border-radius: 5px;
-        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
-        height:90vh;
-    }
-    .slide{
-        display:none;
-        position:fixed;
-        top:50%;
-        left:50%;
-        transform: translate(-50%,-50%);
-    }
-</style>
+    <script src="/static/js/slideshow.js"></script>
+    <script src="/static/js/dropdown.js"></script>
 {% endblock %}
 
 {% block content %}
-<div class="slideshow">
+<div class="slideshow w-fill h-fill" id="slideshow" style="display:none">
     {% for item in items %}
-        <img class="slide" src="/static/upload/{{folder}}/{{item.name}}">
+        <div style="display:none" class="fixed w-screen h-screen z-20 flex justify-center items-center slide">
+            <img style="height:90vh" class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}">
+        </div>
     {% endfor %}
 </div>
 
-<form class="content" action="/folder" method="post">
-    <div class="header">
-        <h1>{{folder}}</h1>
-        <div class="buttons">
-            <button type="submit" name="back"><i class="bi bi-arrow-left"></i></button>
+<div id="content" class="m-auto max-w-6xl px-10 pb-10" style="display:block">
+    <form action="/folder" method="post">
 
-            <button type="button" onClick="dropdown()" name="sort"><i class="bi bi-sort-down"></i></button>
-            <div id="dropdown" class="dropdown">
-                <button class="dropdown_option" id="name_button" onClick="disableButton(this.id)" type="submit" style="margin-bottom:5px;" name="name_button" value="{{folder}}" title="sort by name"><h3>Name</h3></button>
-                <br>
-                <button class="dropdown_option" id="date_button" onClick="disableButton(this.id)" type="submit" style="margin-top:5px;" name="date_button" value="{{folder}}" title = "sort by date"><h3>Date</h3></button>
+        <div class="mt-0 mr-auto absolute flex gap-10">
+            <a href="/" name="back" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
+                    <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+                </svg>
+            </a>
+
+            <button type="submit" id="reset" name="reset" value="{{folder}}" onClick="disableButton(this.id)" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black" fill="currentColor">
+                    <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd" />
+                </svg>  
+            </button>
+
+            <div>
+                <button type="button" onClick="dropdown()" name="sort" class="focus:outline-none">
+                    <svg id="dropdown_button"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
+                        <path fill-rule="evenodd" d="M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h7.508a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.75.75v6.59l1.95-2.1a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 111.1-1.02l1.95 2.1V7.75A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75h4.562a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <div id="dropdown" style=" transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "block absolute right-5 mt-2 z-10 gap-5 w-40 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
+                    <button class="focus:outline-none text-md p-5 text-slate-800" id="name_button" onClick="disableButton(this.id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
+                        Sort by Name
+                    </button>
+                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onClick="disableButton(this.id)" type="submit" name="date_button" value="{{folder}}" title="sort by date">
+                        Sort by Date
+                    </button>
+                </div>
             </div>
 
-            <button type="submit" name="attendance" value="{{folder}}"><i class="bi bi-people"></i></i></button>
-            <button type="submit" name="reload" value="{{folder}}" onClick="disableButton(this.id)" id="reload"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="submit" name="attendance" value="{{folder}}" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
+                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z" />
+                </svg>                   
+            </button>
         </div>
-    </div>
 
-    <div class="wrapper">
-        {% for item in items %}
-        <div class = "item">
-            <button type="submit" name="item" value="{{folder}}/{{item.name}}"><img src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}"></button>
-            <h3>{{item.text}}</h3>
+        <div class="mt-10 flex justify-center items-center">
+            <h1 class="font-bold text-3xl text-gray-800">{{folder}}</h1>
         </div>
-        {% endfor %}
-    </div>
-</form>
+    
+        <div class="grid grid-col mt-20 gap-10 grid-cols-3">
+            {% for item in items %}
+            <div class = "flex flex-col justify-center items-center gap-5">
+                <button style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                    <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}">
+                </button>
+                <h3 class="font-bold text-gray-800">{{item.text}}</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -4,59 +4,18 @@
 <script src="/static/js/popup.js"></script>
 {% endblock %}
 
-{% block style %}
-<style>
-    .wrapper{
-        display: grid;
-        grid-template-columns: (2, 1fr);
-        justify-items: center;
-        gap: 20px;
-        margin: 60px 300px 40px 300px;
-        padding: 60px 60px 60px 60px;
-
-        border-radius:10px;
-        background-color: rgba(255, 255, 255, 0.3);
-
-        box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
-    }
-    .wrapper button{
-        background:none;
-        cursor: pointer;
-        border:none;
-    }
-    .wrapper img{
-        border-radius: 5px;
-        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
-    }
-    .wrapper a{
-        color:rgb(77, 82, 95);
-        text-decoration: none;
-    }
-    .wrapper a:hover{
-        filter:brightness(0.7);
-    }
-    .wrapper .text-wrapper {
-        display: grid;
-        justify-items: center;
-        padding: 10px 20px 10px 20px;
-        border-radius:10px;
-        background-color: rgba(255, 255, 255);
-        box-shadow: 0px 0px 2px rgba(0,0,0,0.1);  
-    }
-    .wrapper h3{
-        color:rgb(107, 114, 133);
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<form action="/item" method="post">
-    <div class="header">
-        <h1>Page Not Found</h1>
-    </div>
-    <div class="wrapper">
-        <a href="{{ url_for('main.index') }}"><h2>Click here to return to the main screen</h2></a>
-        <h3>Please contact the administrator if this error persists</h3>
-    </div>
-</form>
+<div class="m-auto max-w-6xl px-10">
+    <form action="/item" method="post">
+        <div class="mt-10 flex justify-center items-center">
+            <h1 class="font-bold text-3xl text-gray-800">Page not Found</h1>
+        </div>
+        <div class="flex flex-col justify-center items-center mt-20 gap-10">
+            <div class="text-2xl text-gray-800">
+                <a class="bg-white px-2 py-1 border-radius rounded border border-gray-400 font-bold text-gray-800" href="{{ url_for('main.index') }}">Click here</a> to return to the main screen
+            </div>
+            <h3 class="text-xl text-gray-600">Please contact the administrator if this error persists</h3>
+        </div>
+    </form>
+</div>
 {% endblock %}

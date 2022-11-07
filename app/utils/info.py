@@ -16,4 +16,4 @@ source_folder = config.get("source file location", "source")
 
 # get destination folder
 
-destination_folder = os.path.join(basedir, "app", "static", "upload")
+destination_folder = os.path.join(basedir, "app", "static", "upload", "")

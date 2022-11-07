@@ -8,6 +8,7 @@ from config import basedir
 # copies folders into destination folder
 
 def load_folders():
+
     # deletes destination folder (static/upload)
     if os.path.exists(destination_folder):
         shutil.rmtree(destination_folder)
@@ -21,12 +22,42 @@ def load_folders():
             if item.endswith(".pdf"):
                 convert_pdf(os.path.join(destination_folder, folder, item))
                 os.remove(os.path.join(destination_folder, folder, item))
-            elif item.endswith(".png"):
-                pass
-            elif item.endswith(".jpg"):
-                pass
+            elif item.endswith(".png") or item.endswith(".jpg"):
+                page_name = f"--page_number_1--.jpg"
+                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
             else:
                 os.remove(os.path.join(destination_folder, folder, item))
+
+    if os.path.exists(destination_folder) == False:
+        os.mkdir(destination_folder)
+
+# loads single folder
+
+def load_folder(folder):
+
+    destination_sub_folder = os.path.join(destination_folder, folder)
+    source_sub_folder = os.path.join(source_folder, folder)
+
+    # deletes destination folder (static/upload/{sub_folder})
+    if os.path.exists(destination_sub_folder):
+        shutil.rmtree(destination_sub_folder)
+
+    # copies all items from source to destination
+    shutil.copytree(source_sub_folder, destination_sub_folder, copy_function=copy2)
+
+    # removes items that are not jpegs or pngs and converts pdfs to jpegs
+    for item in os.listdir(os.path.join(destination_sub_folder)):
+        if item.endswith(".pdf"):
+            convert_pdf(os.path.join(destination_sub_folder, item))
+            os.remove(os.path.join(destination_sub_folder, item))
+        elif item.endswith(".png") or item.endswith(".jpg"):
+            page_name = f"--page_number_1--.jpg"
+            os.rename(os.path.join(destination_folder, source_sub_folder, item), os.path.join(destination_folder, source_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
+        else:
+            os.remove(os.path.join(destination_sub_folder, item))
+
+    if os.path.exists(destination_sub_folder) == False:
+        os.mkdir(destination_sub_folder)
 
 # converts pdf to jpeg
 

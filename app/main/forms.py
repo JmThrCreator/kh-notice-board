@@ -4,4 +4,4 @@ from wtforms.validators import DataRequired, NumberRange
 
 class Attendance(FlaskForm):
     attendance = DecimalField("Attendance", validators=[DataRequired(), NumberRange(min=1, max=200)])
-    submit = SubmitField("Submit")
+    submit = SubmitField("")

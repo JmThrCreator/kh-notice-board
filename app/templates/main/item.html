@@ -1,44 +1,21 @@
 {% extends "base.html" %}
 
-{% block script %}
-<style>
-    .header button{
-        z-index: 1;
-        position: fixed;
-    }
-    .wrapper{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        gap:60px;
-        margin: 60px 20px 60px 20px;
-    }
-    .wrapper button{
-        background:none;
-        cursor: pointer;
-        border:none;
-    }
-    .wrapper img{
-        border-radius: 5px;
-        box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<form action="/item" method="post">
-    <div class="header">
-        <div class="buttons">
-            <button type="submit" name="back" value="{{folder}}"><i class="bi bi-arrow-left"></i></button>
+<div class=" m-auto max-w-6xl px-10">
+    <form action="/item" method="post">
+        <div class=" mt-0 mr-auto flex fixed gap-10">
+            <button type="submit" name="back" value="{{folder}}" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"class=" w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
+                    <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+                </svg> 
+            </button>
         </div>
-    </div>
-
-    <div class="wrapper">
-        {% for item in items %}
-            <img src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}">
-        {% endfor %}
-    </div>
-</form>
+    
+        <div class="flex flex-col justify-center items-center gap-5 my-10">
+            {% for item in items %}
+                <img style="width: 50rem; z-index:100;" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}" class="border border-gray-400 rounded-xl">
+            {% endfor %}
+        </div>
+    </form>
+</div>
 {% endblock %}

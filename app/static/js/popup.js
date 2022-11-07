@@ -1,6 +1,6 @@
 function showPopup() {
     items = document.getElementById("popup");
-    items.style.display = "block";
+    items.style.display = "flex";
 }
 
 function clearPopup() {
