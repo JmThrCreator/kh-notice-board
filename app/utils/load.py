@@ -12,6 +12,8 @@ def load_folders():
     # deletes destination folder (static/upload)
     if os.path.exists(destination_folder):
         shutil.rmtree(destination_folder)
+    else:
+        os.mkdir(destination_folder)
 
     # copies all items from source to destination
     shutil.copytree(source_folder, destination_folder, copy_function=copy2)
@@ -113,6 +115,8 @@ def get_pages(folder, text):
 # returns list of items in destination folder
 
 def get_folders():
+    if not os.path.exists(destination_folder):
+        os.mkdir(destination_folder)
     return os.listdir(destination_folder)
 
 # returns list of items in folder
