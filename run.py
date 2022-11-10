@@ -7,7 +7,6 @@ from configobj import ConfigObj
 def request_source_folder():
     root = tk.Tk()
     root.withdraw()
-
  
     file_path = filedialog.askdirectory(title="Select the source folder")
     return(file_path)

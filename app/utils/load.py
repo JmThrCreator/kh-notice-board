@@ -18,6 +18,12 @@ def load_folders():
 
     # removes items that are not jpegs or pngs and converts pdfs to jpegs
     for folder in os.listdir(destination_folder):
+
+        # delete item if it's a file
+        if not os.path.isdir(os.path.join(destination_folder, folder)):
+            os.remove(os.path.join(destination_folder, folder))
+            continue
+
         for item in os.listdir(os.path.join(destination_folder, folder)):
             if item.endswith(".pdf"):
                 convert_pdf(os.path.join(destination_folder, folder, item))
