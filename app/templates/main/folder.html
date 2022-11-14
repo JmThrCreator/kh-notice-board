@@ -1,30 +1,21 @@
 {% extends "base.html" %}
 
 {% block script %}
-    <script src="/static/js/slideshow.js"></script>
     <script src="/static/js/dropdown.js"></script>
 {% endblock %}
 
 {% block content %}
-<div class="slideshow w-fill h-fill" id="slideshow" style="display:none">
-    {% for item in items %}
-        <div style="display:none" class="fixed w-screen h-screen z-20 flex justify-center items-center slide">
-            <img style="height:90vh" class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}">
-        </div>
-    {% endfor %}
-</div>
-
-<div id="content" class="m-auto max-w-6xl px-10 pb-10" style="display:block">
+<div id="content" class="m-auto max-w-6xl px-10 pb-10 relative">
     <form action="/folder" method="post">
-
+        
         <div class="mt-0 mr-auto absolute flex gap-10">
-            <a href="/" name="back" class="focus:outline-none">
+            <a onclick="showLoad(id)" href="/" name="back" class="focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
                     <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                 </svg>
             </a>
 
-            <button type="submit" id="reset" name="reset" value="{{folder}}" onClick="disableButton(this.id)" class="focus:outline-none">
+            <button type="submit" id="reset" name="reset" value="{{folder}}" onclick="disableButton(this.id)" class="focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black" fill="currentColor">
                     <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd" />
                 </svg>  
@@ -37,17 +28,20 @@
                     </svg>
                 </button>
 
-                <div id="dropdown" style=" transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "block absolute right-5 mt-2 z-10 gap-5 w-40 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
-                    <button class="focus:outline-none text-md p-5 text-slate-800" id="name_button" onClick="disableButton(this.id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
+                <div id="dropdown" style=" transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "block absolute right-5 mt-2 z-10 gap-5 w-56 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
+                    <button class="focus:outline-none text-md p-5 text-slate-800" id="name_button" onclick="showLoad(id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
                         Sort by Name
                     </button>
-                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onClick="disableButton(this.id)" type="submit" name="date_button" value="{{folder}}" title="sort by date">
-                        Sort by Date
+                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onclick="showLoad(id)" type="submit" name="ascending_date_button" value="{{folder}}" title="sort by ascending date">
+                        Sort by Ascending Date
+                    </button>
+                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onclick="showLoad(id)" type="submit" name="descending_date_button" value="{{folder}}" title="sort by descending date">
+                        Sort by Descending Date
                     </button>
                 </div>
             </div>
 
-            <button type="submit" name="attendance" value="{{folder}}" class="focus:outline-none">
+            <button type="submit" onclick="showLoad(id)" id="attendance" name="attendance" value="{{folder}}" class="focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
                     <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z" />
                 </svg>                   
@@ -61,7 +55,7 @@
         <div class="grid grid-col mt-20 gap-10 grid-cols-3">
             {% for item in items %}
             <div class = "flex flex-col justify-center items-center gap-5">
-                <button style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
                     <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}">
                 </button>
                 <h3 class="font-bold text-gray-800">{{item.text}}</h3>

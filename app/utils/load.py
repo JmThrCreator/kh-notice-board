@@ -30,8 +30,11 @@ def load_folders():
             if item.endswith(".pdf"):
                 convert_pdf(os.path.join(destination_folder, folder, item))
                 os.remove(os.path.join(destination_folder, folder, item))
-            elif item.endswith(".png") or item.endswith(".jpg"):
+            elif item.endswith(".jpg") or item.endswith(".jpeg"):
                 page_name = f"--page_number_1--.jpg"
+                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
+            elif item.endswith(".png"):
+                page_name = f"--page_number_1--.png"
                 os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
             else:
                 os.remove(os.path.join(destination_folder, folder, item))
@@ -58,8 +61,11 @@ def load_folder(folder):
         if item.endswith(".pdf"):
             convert_pdf(os.path.join(destination_sub_folder, item))
             os.remove(os.path.join(destination_sub_folder, item))
-        elif item.endswith(".png") or item.endswith(".jpg"):
+        elif item.endswith(".jpg") or item.endswith(".jpeg"):
             page_name = f"--page_number_1--.jpg"
+            os.rename(os.path.join(destination_folder, source_sub_folder, item), os.path.join(destination_folder, source_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
+        elif item.endswith(".png"):
+            page_name = f"--page_number_1--.png"
             os.rename(os.path.join(destination_folder, source_sub_folder, item), os.path.join(destination_folder, source_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
         else:
             os.remove(os.path.join(destination_sub_folder, item))
@@ -109,7 +115,6 @@ def get_pages(folder, text):
                 pages.append({"name":page, "width":size[0], "height":size[1], "text":text})
         except:
             pass
-    print(pages)
     return pages
 
 # returns list of items in destination folder
@@ -137,7 +142,10 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
                    continue
             except:
                 size = get_size(item, folder=folder, size=1)
-                text = item.split(".jpg")[0]
+                if item.endswith(".png"):
+                    text = item.split(".png")[0]
+                else:
+                    text = item.split(".jpg")[0]
             items.append({"name":item, "width":size[0], "height":size[1], "text":text})
 
     elif page == "item":
@@ -147,13 +155,19 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
             if page_number == 1:
                 items = get_pages(folder, text)
         except:
-            text = item.split(".jpg")[0]
+            if item.endswith(".png"):
+                text = item.split(".png")[0]
+            else:
+                text = item.split(".jpg")[0]
             size = get_size(item, folder=folder, size=3)
             items.append({"name":item, "width":size[0], "height":size[1], "text":text})    
 
     # sorts items by date, name, or order
-    if sort_by == "date":
+    if sort_by == "date_ascending":
         items = sort_by_date(items, folder)
+    if sort_by == "date_descending":
+        items = sort_by_date(items, folder)
+        items.reverse()
     elif sort_by == "order":
         items = sort_by_order(items)
 

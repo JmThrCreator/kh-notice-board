@@ -24,14 +24,14 @@ def index():
             folders = get_folders()
         for folder in folders:
             if folder in request.form:
-                return redirect(url_for("main.folder", folder=folder, sort="date"))
+                return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
     return render_template("main/index.html", folders = folders)
 
 # folder
 
 @bp.route("/folder", methods=["GET", "POST"])
 @bp.route("/folder/<folder>/<sort>", methods=["GET", "POST"])
-def folder(folder=None, sort="date"):
+def folder(folder=None, sort="date_ascending"):
 
     if request.method == "POST":
         if "back" in request.form: 
@@ -39,16 +39,19 @@ def folder(folder=None, sort="date"):
         elif "name_button" in request.form:
             folder = request.form.get("name_button")
             return redirect(url_for("main.folder", folder=folder, sort="name"))
-        elif "date_button" in request.form:
-            folder = request.form.get("date_button")
-            return redirect(url_for("main.folder", folder=folder, sort="date"))
+        elif "ascending_date_button" in request.form:
+            folder = request.form.get("ascending_date_button")
+            return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
+        elif "descending_date_button" in request.form:
+            folder = request.form.get("descending_date_button")
+            return redirect(url_for("main.folder", folder=folder, sort="date_descending"))
         elif "attendance" in request.form:
             congregation = request.form.get("attendance")
             return redirect(url_for("main.attendance", congregation=congregation))
         elif "reset" in request.form:
             folder = request.form.get("reset")
             load_folder(folder)
-            return redirect(url_for("main.folder", folder=folder, sort="date"))
+            return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
         elif "item" in request.form:
             path = request.form.get("item")
             folder=path.split("/")[0]
@@ -68,7 +71,7 @@ def item(folder=None, item=None):
     if request.method == "POST":
         if "back" in request.form:
             folder = request.form.get("back")
-            return redirect(url_for("main.folder", folder=folder, sort="date"))
+            return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
     
     items = get_items(folder=folder, item=item, page="item", sort_by="order")
 
@@ -85,7 +88,7 @@ def attendance():
     if request.method == "POST":
         if "back" in request.form:
             folder = request.form.get("back")
-            return redirect(url_for("main.folder", folder=folder, sort="date"))
+            return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
         elif "clear_attendance" in request.form:
             folder = request.form.get("clear_attendance")
             db.session.query(AttendanceModel).filter_by(congregation=congregation).delete()
@@ -109,5 +112,6 @@ def attendance():
             db.session.commit()
 
     attendance_data = db.session.query(AttendanceModel).filter_by(congregation=congregation).all()
+    attendance_data.reverse()
 
     return render_template("main/attendance.html", form=form, attendance_data=attendance_data, congregation=congregation)
