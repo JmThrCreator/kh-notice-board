@@ -84,25 +84,20 @@ def convert_pdf(item):
         page_name = f"--page_number_{count+1}--.jpg"
         page.save(os.path.join(destination_folder, item.split("/")[-1].split(".")[0] + page_name))
 
-# returns image size
+# returns image width
 
-def get_size(item, folder, size=1):
+def get_width(item, folder, size=1):
     image = PIL.Image.open(os.path.join(destination_folder, folder, item))
     width, height = image.size
     perimiter = 546.82*size
     if width > height:
-        ratio = width/height
-        height = (ratio-1)*perimiter
         width = perimiter-width
     elif width < height:
         ratio = height/width
         width = (ratio-1)*perimiter
-        height = perimiter-height
     else:
-        ratio = 1
         width = perimiter/2
-        height = perimiter/2
-    return width, height    
+    return width
 
 # returns pages
 
@@ -111,8 +106,8 @@ def get_pages(folder, text):
     for page in os.listdir(os.path.join(destination_folder, folder)):
         try:
             if page.split("--page_number_")[0] == text:
-                size = get_size(page, folder=folder, size=3)
-                pages.append({"name":page, "width":size[0], "height":size[1], "text":text})
+                width = get_width(page, folder=folder, size=3)
+                pages.append({"name":page, "width":width, "text":text})
         except:
             pass
     return pages
@@ -123,6 +118,16 @@ def get_folders():
     if not os.path.exists(destination_folder):
         os.mkdir(destination_folder)
     return os.listdir(destination_folder)
+
+# returns True if item has multiple pages
+
+def is_page_multiple(item, folder):
+    count = 0
+    for item_check in os.listdir(os.path.join(destination_folder, folder)):
+        if item_check.split("--page_number_")[0] == item.split("--page_number_")[0]:
+            count += 1
+    if count > 1: return True
+    return False
 
 # returns list of items in folder
 
@@ -136,17 +141,18 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
             try:
                 page_number = int(item.split("--page_number_")[1][0])
                 if page_number == 1:
-                    size = get_size(item, folder=folder, size=1)
+                    width = get_width(item, folder=folder, size=1)
                     text = item.split("--page_number_1--")[0]
+                    multiple = is_page_multiple(item=item, folder=folder)
                 else:
                    continue
             except:
-                size = get_size(item, folder=folder, size=1)
+                width = get_width(item, folder=folder, size=1)
                 if item.endswith(".png"):
                     text = item.split(".png")[0]
                 else:
                     text = item.split(".jpg")[0]
-            items.append({"name":item, "width":size[0], "height":size[1], "text":text})
+            items.append({"name":item, "width":width, "text":text, "multiple":multiple})
 
     elif page == "item":
         try:
@@ -159,8 +165,8 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
                 text = item.split(".png")[0]
             else:
                 text = item.split(".jpg")[0]
-            size = get_size(item, folder=folder, size=3)
-            items.append({"name":item, "width":size[0], "height":size[1], "text":text})    
+            width = get_width(item, folder=folder, size=3)
+            items.append({"name":item, "width":width, "text":text})    
 
     # sorts items by date, name, or order
     if sort_by == "date_ascending":

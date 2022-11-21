@@ -54,11 +54,16 @@
     
         <div class="grid grid-col mt-20 gap-10 grid-cols-3">
             {% for item in items %}
-            <div class = "flex flex-col justify-center items-center gap-5">
+            <div class = "flex flex-col justify-center items-center gap-5 relative">
+                {% if item.multiple %}
+                    <button onclick="showLoad(id)" style="margin-left:0px; top:3px" class="absolute bg-gray-300 rounded-xl" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                        <img class="invisible" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
+                    </button>
+                {% endif %}
                 <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
-                    <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}" height="{{item.height}}">
+                    <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
                 </button>
-                <h3 class="font-bold text-gray-800">{{item.text}}</h3>
+                <h3 class="font-bold text-gray-800" style="z-index:100">{{item.text}}</h3>
             </div>
             {% endfor %}
         </div>

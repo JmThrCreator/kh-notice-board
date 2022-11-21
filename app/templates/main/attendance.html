@@ -50,7 +50,7 @@
         </div>
     
         <div class="flex justify-center mt-20 gap-10">   
-            <div style="width:25rem; height:28rem; z-index:100" class="flex flex-col items-center p-10 bg-white bg-opacity-50 border border-gray-400 rounded-lg gap-5">
+            <div style="width:25rem; height:28rem; z-index:100" class="flex flex-col bg-opacity-50 items-center p-10 bg-white border border-gray-400 rounded-lg gap-5">
                 <div class="flex flex-col gap-10">
                     {{ form.attendance(class="border-b p-2 bg-transparent border-gray-400 focus:outline-none text-2xl", id="input_box", autocomplete="off", placeholder="0", style="width:11rem") }}
                     <div class=" grid gap-4 grid-cols-3 grid-rows-4 grid-col">
@@ -113,7 +113,7 @@
 
             </div>
 
-            <div style="width:25rem; min-height:28rem; z-index:100" class="relative mb-10 flex flex-col text-left items-left p-10 h-96 bg-white bg-opacity-50 border border-gray-400 rounded-lg gap-10">
+            <div style="width:25rem; min-height:28rem; z-index:100" class="relative bg-opacity-50 mb-10 flex flex-col text-left items-left p-10 h-96 bg-white border border-gray-400 rounded-lg gap-10">
                 {% for entry in attendance_data %}
                     <h3 class=" font-bold text-gray-800  ">
                         {{ entry.weekday }} {{ entry.day }} | Attendance: {{ entry.attendance_number }}
