@@ -29,13 +29,13 @@
                 </button>
 
                 <div id="dropdown" style=" transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "block absolute right-5 mt-2 z-10 gap-5 w-56 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
-                    <button class="focus:outline-none text-md p-5 text-slate-800" id="name_button" onclick="showLoad(id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
+                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
                         Sort by Name
                     </button>
-                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onclick="showLoad(id)" type="submit" name="ascending_date_button" value="{{folder}}" title="sort by ascending date">
+                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="ascending_date_button" value="{{folder}}" title="sort by ascending date">
                         Sort by Ascending Date
                     </button>
-                    <button class="focus:outline-none text-md p-5 text-slate-800" id="date_button" onclick="showLoad(id)" type="submit" name="descending_date_button" value="{{folder}}" title="sort by descending date">
+                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="descending_date_button" value="{{folder}}" title="sort by descending date">
                         Sort by Descending Date
                     </button>
                 </div>
@@ -55,14 +55,19 @@
         <div class="grid grid-col mt-20 gap-10 grid-cols-3">
             {% for item in items %}
             <div class = "flex flex-col justify-center items-center gap-5 relative">
-                {% if item.multiple %}
-                    <button onclick="showLoad(id)" style="margin-left:0px; top:3px" class="absolute bg-gray-300 rounded-xl" type="submit" name="item" value="{{folder}}/{{item.name}}">
-                        <img class="invisible" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
-                    </button>
-                {% endif %}
-                <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
-                    <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
-                </button>
+                <div>
+                    {% if item.multiple %}
+                        <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                            <img class="border-b-4 border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
+                        </button>
+                    {% else %}
+                        <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                            <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
+                        </button>
+                    {% endif %}
+                </div>
+
+
                 <h3 class="font-bold text-gray-800" style="z-index:100">{{item.text}}</h3>
             </div>
             {% endfor %}
