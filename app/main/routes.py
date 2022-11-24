@@ -99,11 +99,9 @@ def attendance():
             today = date.today().strftime("%b %d")
             attendance_db = db.session.query(AttendanceModel).filter_by(congregation=congregation, day=today).first()
             
-            """
             # replace if it's already in the database
             if attendance_db:
                 db.session.delete(attendance_db)
-            """
 
             # submit entry to database
             db.session.add(new_attendance)
