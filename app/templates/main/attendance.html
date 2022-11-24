@@ -5,35 +5,22 @@
 <script src="static/js/numpad.js"></script>
 {% endblock %}
 
+{% block style %}
+<style>
+    .attendance-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .attendance-container::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <form class="content" action="" method="post" novalidate>
     {{ form.hidden_tag() }}
-    <div style="display:none; z-index:200" class="fixed w-screen h-screen z-10 flex justify-center items-center" id="popup">
-
-        <div style="width:30rem" class="bg-white rounded-xl p-10 border border-gray-400 flex flex-col mb-64 shadow-xl" >
-                <h3>Are you sure you want to clear all attendance data?</h3>
-                <div class="flex gap-10 justify-center items-center mt-5">
-                    <button 
-                        type="submit" 
-                        name="clear_attendance" 
-                        value="{{congregation}}" 
-                        style="background-color:#ecfeff; color:#38bdf8; border-color:#bae6fd;" 
-                        class="focus:outline-none border font-bold px-4 py-2 rounded-md"
-                        onclick="showLoad(id)"
-                    >
-                        Yes
-                    </button>
-                    
-                    <button 
-                        type="button" 
-                        class="text-red-400 focus:outline-none border border-red-200 bg-red-100 font-bold px-4 py-2 rounded-md" 
-                        onclick="clearPopup()"
-                    >
-                        No
-                    </button>
-                </div>
-        </div>
-    </div>
 
     <div class="m-auto max-w-6xl px-10 relative" >
 
@@ -113,16 +100,14 @@
 
             </div>
 
-            <div style="width:25rem; min-height:28rem; z-index:100" class="relative bg-opacity-50 mb-10 flex flex-col text-left items-left p-10 h-96 bg-white border border-gray-400 rounded-lg gap-10">
-                {% for entry in attendance_data %}
+            <div style="width:25rem; height:28rem; z-index:100;" class="bg-opacity-50 bg-white relative text-left items-left border border-gray-400 rounded-lg p-10">
+                <div style="height:23rem;" class="attendance-container overflow-y-scroll flex flex-col gap-10">
+                    {% for entry in attendance_data %}
                     <h3 class=" font-bold text-gray-800  ">
                         {{ entry.weekday }} {{ entry.day }} | Attendance: {{ entry.attendance_number }}
                     </h3>
-                {% endfor %}
-
-                <button type="button" onclick="showPopup()" name="clear" class="focus:outline-none bg-red-100 font-bold px-5 w-20 py-2 rounded-md border border-red-200 bottom-0 text-red-400">
-                    Clear
-                </button>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>           

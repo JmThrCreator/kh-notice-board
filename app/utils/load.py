@@ -138,6 +138,7 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
     if page == "folder":
         for item in os.listdir(os.path.join(destination_folder, folder)):
             # skip item if it contains a page number that isn't 1
+            multiple = False
             try:
                 page_number = int(item.split("--page_number_")[1][0])
                 if page_number == 1:
@@ -171,9 +172,9 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
     # sorts items by date, name, or order
     if sort_by == "date_ascending":
         items = sort_by_date(items, folder)
+        items.reverse()
     if sort_by == "date_descending":
         items = sort_by_date(items, folder)
-        items.reverse()
     elif sort_by == "order":
         items = sort_by_order(items)
 

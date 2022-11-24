@@ -2,12 +2,39 @@
 
 {% block script %}
     <script src="/static/js/dropdown.js"></script>
+    <script src="/static/js/popup.js"></script>
 {% endblock %}
 
 {% block content %}
-<div id="content" class="m-auto max-w-6xl px-10 pb-10 relative">
-    <form action="/folder" method="post">
-        
+<form action="/folder" method="post">
+    <div style="display:none; z-index:200" class="fixed w-screen h-screen z-10 flex justify-center items-center" id="popup">
+        <div style="width:30rem" class="bg-white rounded-xl p-10 border border-gray-400 flex flex-col mb-64 shadow-xl" >
+            <h3 class="text-center">Are you sure you want reload all congregation files? (this may take a while)</h3>
+            <div class="flex gap-10 justify-center items-center mt-5">
+                <button 
+                    type="submit" 
+                    name="reset"
+                    id="reset"
+                    value="{{folder}}"
+                    style="background-color:#ecfeff; color:#38bdf8; border-color:#bae6fd;" 
+                    class="focus:outline-none border font-bold px-4 py-2 rounded-md"
+                    onclick="showLoad(id);"
+                >
+                    Yes
+                </button>
+                
+                <button 
+                    type="button" 
+                    class="text-red-400 focus:outline-none border border-red-200 bg-red-100 font-bold px-4 py-2 rounded-md" 
+                    onclick="clearPopup()"
+                >
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="content" class="m-auto max-w-6xl px-10 pb-10 relative">      
         <div class="mt-0 mr-auto absolute flex gap-10">
             <a onclick="showLoad(id)" href="/" name="back" class="focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black">
@@ -15,7 +42,7 @@
                 </svg>
             </a>
 
-            <button type="submit" id="reset" name="reset" value="{{folder}}" onclick="disableButton(this.id)" class="focus:outline-none">
+            <button type="button" id="reset" name="reset" onclick="showPopup();" class="focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-12 h-12 text-gray-800 cursor-pointer hover:text-black" fill="currentColor">
                     <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd" />
                 </svg>  
@@ -28,15 +55,15 @@
                     </svg>
                 </button>
 
-                <div id="dropdown" style=" transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "block absolute right-5 mt-2 z-10 gap-5 w-56 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
-                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="name_button" value="{{folder}}" title="sort by name">
-                        Sort by Name
+                <div id="dropdown" style="transition: all .1s ease-in-out; opacity:0; scale:100%; z-index:1000;" class= "flex flex-col absolute right-5 mt-2 z-10 gap-8 px-5 py-5 w-48 origin-top-left rounded-md bg-white border shadow-lg border-gray-400 focus:outline-none">
+                    <button class="pointer-events-none focus:outline-none text-md text-left text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="ascending_date_button" value="{{folder}}">
+                        Latest first
                     </button>
-                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="ascending_date_button" value="{{folder}}" title="sort by ascending date">
-                        Sort by Ascending Date
+                    <button class="pointer-events-none focus:outline-none text-md text-left text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="descending_date_button" value="{{folder}}">
+                        Oldest first
                     </button>
-                    <button class="pointer-events-none focus:outline-none text-md p-5 text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="descending_date_button" value="{{folder}}" title="sort by descending date">
-                        Sort by Descending Date
+                    <button class="pointer-events-none focus:outline-none text-md text-left text-slate-800 sort_button" id="sort_button" onclick="showLoad(id)" type="submit" name="name_button" value="{{folder}}">
+                        Alphabetical order
                     </button>
                 </div>
             </div>
@@ -51,27 +78,26 @@
         <div class="mt-10 flex justify-center items-center">
             <h1 class="font-bold text-3xl text-gray-800">{{folder}}</h1>
         </div>
-    
+
         <div class="grid grid-col mt-20 gap-10 grid-cols-3">
             {% for item in items %}
             <div class = "flex flex-col justify-center items-center gap-5 relative">
-                <div>
+
                     {% if item.multiple %}
-                        <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
-                            <img class="border-b-4 border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
-                        </button>
-                    {% else %}
-                        <button onclick="showLoad(id)" style="z-index:100" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
-                            <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
-                        </button>
+                    <button onclick="showLoad(id)" style="z-index:0" class="absolute rounded-xl bg-white mb-6">
+                        <img class="invisible" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
+                    </button>
                     {% endif %}
-                </div>
+                    <button onclick="showLoad(id)" style="z-index:10" class="flex items-top justify-center cursor-pointer focus:outline-none" type="submit" name="item" value="{{folder}}/{{item.name}}">
+                        <img class="border border-gray-400 rounded-xl" src="/static/upload/{{folder}}/{{item.name}}" width="{{item.width}}">
+                    </button>
 
 
-                <h3 class="font-bold text-gray-800" style="z-index:100">{{item.text}}</h3>
+
+                <h3 class="font-bold text-gray-800" style="z-index:10">{{item.text}}</h3>
             </div>
             {% endfor %}
         </div>
-    </form>
-</div>
+    </div>
+</form>
 {% endblock %}
