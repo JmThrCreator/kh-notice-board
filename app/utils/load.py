@@ -91,7 +91,9 @@ def get_width(item, folder, size=1):
     width, height = image.size
     perimiter = 546.82*size
     if width > height:
-        width = perimiter-width
+        ratio = width/height
+        height = (ratio-1)*perimiter
+        width = perimiter-height
     elif width < height:
         ratio = height/width
         width = (ratio-1)*perimiter
