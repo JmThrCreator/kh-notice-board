@@ -1,4 +1,3 @@
 FLASK_APP=app.py
-DEBUG=true
-FLASK_ENV=development
+DEBUG=false
 SECRET_KEY=
