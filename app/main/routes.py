@@ -92,11 +92,13 @@ def attendance():
         elif "submit" in request.form and form.validate_on_submit():
 
             # get and prepare the data for the database
+            today = date.today().strftime("%b %d")
             new_attendance = AttendanceModel(
                 attendance_number=int(form.attendance.data),
-                congregation=(congregation)
+                congregation=(congregation),
+                day=today,
+                weekday=date.today().strftime("%A")
             )
-            today = date.today().strftime("%b %d")
             attendance_db = db.session.query(AttendanceModel).filter_by(congregation=congregation, day=today).first()
             
             # replace if it's already in the database
