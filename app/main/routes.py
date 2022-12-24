@@ -25,7 +25,7 @@ def index():
         for folder in folders:
             if folder in request.form:
                 return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
-    return render_template("main/index.html", folders = folders)
+    return render_template("main/index.html", folders=folders)
 
 # folder
 
@@ -60,7 +60,11 @@ def folder(folder=None, sort="date_ascending"):
 
     items = get_items(folder=folder, page="folder", sort_by=sort)
 
-    return render_template("main/folder.html", folder = folder, items = items)
+    today = date.today().strftime("%b %d")
+    attendance = db.session.query(AttendanceModel.attendance_number).filter_by(congregation=folder, day=today).first()
+    if attendance: 
+        attendance = attendance[0]
+    return render_template("main/folder.html", folder=folder, items=items, attendance=attendance)
 
 # item
 
@@ -75,7 +79,7 @@ def item(folder=None, item=None):
     
     items = get_items(folder=folder, item=item, page="item", sort_by="order")
 
-    return render_template("main/item.html", folder = folder, item = item, items = items)
+    return render_template("main/item.html", folder=folder, item=item, items=items)
 
 # attendance
 

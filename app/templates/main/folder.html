@@ -75,11 +75,16 @@
             </button>
         </div>
 
-        <div class="mt-10 flex justify-center items-center">
+        <div class="mt-10 flex  items-center flex-col gap-2 h-20">
             <h1 class="font-bold text-3xl text-gray-800">{{folder}}</h1>
+            {% if attendance %} 
+            <h2 class=" text-gray-700">
+                Attendance: {{attendance}}
+            </h2>
+            {% endif %}
         </div>
 
-        <div class="grid grid-col mt-20 gap-5 grid-cols-3 relative">
+        <div class="grid grid-col mt-12 gap-5 grid-cols-3 relative">
             {% for item in items %}
             <div class = "flex flex-col justify-center items-center gap-5">
 

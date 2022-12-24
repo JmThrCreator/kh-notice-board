@@ -63,10 +63,10 @@ def load_folder(folder):
             os.remove(os.path.join(destination_sub_folder, item))
         elif item.endswith(".jpg") or item.endswith(".jpeg"):
             page_name = f"--page_number_1--.jpg"
-            os.rename(os.path.join(destination_folder, source_sub_folder, item), os.path.join(destination_folder, source_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
+            os.rename(os.path.join(destination_sub_folder, item), os.path.join(destination_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
         elif item.endswith(".png"):
             page_name = f"--page_number_1--.png"
-            os.rename(os.path.join(destination_folder, source_sub_folder, item), os.path.join(destination_folder, source_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
+            os.rename(os.path.join(destination_sub_folder, item), os.path.join(destination_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
         else:
             os.remove(os.path.join(destination_sub_folder, item))
 
