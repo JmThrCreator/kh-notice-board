@@ -1,6 +1,6 @@
 # KH Notice Board
 
-An easy to-set-up notice board that can display PDF, JPEG and PNG files and manage attendance.
+An easy to-set-up kingdom hall/congregation notice board that can display PDF, JPEG and PNG files and manage attendance. Made using Flask.
 
 ## Setup
 
