@@ -4,6 +4,7 @@ from pdf2image import convert_from_path
 from app.utils.info import source_folder, destination_folder
 from app.utils.sort import sort_by_date, sort_by_order
 from config import basedir
+from sys import platform
 
 # copies folders into destination folder
 
@@ -76,13 +77,19 @@ def load_folder(folder):
 # converts pdf to jpeg
 
 def convert_pdf(item):
-    poppler_path = os.path.join(basedir, "app", "utils", "modules", "poppler", "Library", "bin")
-    converted_file = convert_from_path(item, poppler_path=poppler_path)
+    if platform == "linux":
+        converted_file = convert_from_path(item)
+    elif platform == "win32":
+        poppler_path = os.path.join(basedir, "app", "utils", "modules", "poppler", "Library", "bin")
+        converted_file = convert_from_path(item, poppler_path=poppler_path)
 
     # saves converted file to destination folder
     for count, page in enumerate(converted_file):
         page_name = f"--page_number_{count+1}--.jpg"
-        page.save(os.path.join(destination_folder, item.split("/")[-1].split(".")[0] + page_name))
+        if platform == "linux":
+            page.save(os.path.join(destination_folder, item + page_name))
+        elif platform == "win32":
+            page.save(os.path.join(destination_folder, item.split("/")[-1].split(".")[0] + page_name))
 
 # returns image width
 

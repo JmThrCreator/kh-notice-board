@@ -25,6 +25,8 @@ def index():
         for folder in folders:
             if folder in request.form:
                 return redirect(url_for("main.folder", folder=folder, sort="date_ascending"))
+
+    folders.sort()
     return render_template("main/index.html", folders=folders)
 
 # folder
