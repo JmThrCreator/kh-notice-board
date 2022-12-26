@@ -25,12 +25,12 @@ pip install -r requirements.txt
 sudo apt install python3
 sudo apt install python3-venv
 sudo apt install google-chrome-stable
+```
 
 2. Enter into the notice board directory in the command line.
 
 3. Create a virtual environment and install the dependencies using the following commands:
 
-```
 python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install --upgrade pip
