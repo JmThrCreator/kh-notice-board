@@ -31,6 +31,7 @@ sudo apt install google-chrome-stable
 
 3. Create a virtual environment and install the dependencies using the following commands:
 
+```
 python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install --upgrade pip
