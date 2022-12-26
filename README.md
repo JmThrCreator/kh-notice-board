@@ -4,7 +4,7 @@ An easy to-set-up kingdom hall/congregation notice board that can display PDF, J
 
 ## Windows Setup
 
-1. Install python (you can use the Microsoft Store on Windows).
+1. Install python (you can use the Microsoft Store).
 
 2. Enter into the notice board directory in the command line.
 
@@ -43,11 +43,11 @@ sudo apt-get install poppler-utils
 
 1. Begin by changing the source folder path in the config.ini file (as shown by the example). This folder should contain your folder directories with PDF, JPEG and PNG files within them. You can find an example of one in the "example_source" folder. Your source folder can be synced to your perfered cloud storage platform, such as OneDrive or Dropbox, for remote access if needed. The source folder location can then be changed any time in the config file.
 
-2. Run 'run.bat'. The notice board should then open in your default browser.
+2. Run 'run.bat' for Windows or run 'bash run.sh' in the linux command line. The notice board should then open in your default browser.
 
-3. (Optional) Make sure the 'run.bat' file runs on startup in case your system is updated, restarted or shut down.
+3. (Optional) Make sure the 'run.bat' ('run.sh' for linux) file runs on startup in case your system is updated, restarted or shut down.
 
-4. (Optional) Set up the scheduler for your system to regularly refresh the files automatically. You should link the scheduler to the file 'scheduler.bat'.
+4. (Optional) Set up the scheduler for your system to regularly refresh the files automatically. You should link the scheduler to the file 'scheduler.bat' ('scheduler.sh' for linux).
 
 ## Configuration
 
