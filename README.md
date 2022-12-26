@@ -22,9 +22,7 @@ pip install -r requirements.txt
 1. Install python and chrome-browser-stable
 
 ```
-sudo apt install python3
-sudo apt install python3-venv
-sudo apt install google-chrome-stable
+sudo apt install python3 python3-venv google-chrome-stable
 ```
 
 2. Enter into the notice board directory in the command line.
