@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source venv/bin/activate
-python3 -m flask run
+waitress-serve --host 127.0.0.1 app:app

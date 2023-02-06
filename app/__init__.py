@@ -43,6 +43,6 @@ from app import models
 config = get_config()
 if config.get("developer mode", "developer") == "0":
     if platform.system() == "Linux":
-        os.system("google-chrome-stable -kiosk -app=http://127.0.0.1:8080/")
+        os.system("google-chrome-stable -kiosk -app=http://127.0.0.1:8080/ &")
     elif platform.system() == "Windows":
         os.system("start chrome.exe --kiosk --app=http://127.0.0.1:8080/")
