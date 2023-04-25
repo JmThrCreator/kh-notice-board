@@ -4,10 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from sys import platform
 
 # create app
 
 app = Flask(__name__)
+
+if platform == "win32":
+    if __name__ == '__main__':
+        from waitress import serve
+        serve(app, host='0.0.0.0', port=8000)
 
 # config
 
