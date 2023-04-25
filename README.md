@@ -10,6 +10,17 @@ An easy to-set-up kingdom hall/congregation notice board that can display PDF, J
 
 3. Create a virtual environment and install the dependencies using the following commands:
 
+### Windows
+
+```
+python3 -m venv venv
+venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### Linux
+
 ```
 python3 -m venv venv
 venv\Scripts\activate
