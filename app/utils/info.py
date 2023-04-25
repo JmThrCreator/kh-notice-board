@@ -1,4 +1,4 @@
-import os, sys, configparser
+import os, configparser
 from config import basedir
 
 # get data from config.ini
