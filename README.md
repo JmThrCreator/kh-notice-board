@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 sudo apt install python3 python3-venv google-chrome-stable
 python3 -m venv venv
-sudo venv/bin/activate
+source venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
