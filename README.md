@@ -14,7 +14,7 @@ An easy to-set-up kingdom hall/congregation notice board that can display PDF, J
 
 ```
 python3 -m venv venv
-venv/bin/activate
+venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ```
 python3 -m venv venv
-venv\Scripts\activate
+venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
