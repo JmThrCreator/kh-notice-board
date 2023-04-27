@@ -146,6 +146,10 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
 
     if page == "folder":
         for item in os.listdir(os.path.join(destination_folder, folder)):
+            if os.path.isdir(item)
+                continue
+            elif not (item.endswith(".png" or item.endswith(".jpg") or item.endswith(".jpeg")):
+                continue
             # skip item if it contains a page number that isn't 1
             multiple = False
             try:
@@ -160,8 +164,10 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
                 width = get_width(item, folder=folder, size=1)
                 if item.endswith(".png"):
                     text = item.split(".png")[0]
-                else:
+                elif item.endswith(".jpg"):
                     text = item.split(".jpg")[0]
+                else:
+                    text = item.split(".jpeg")[0]
             items.append({"name":item, "width":width, "text":text, "multiple":multiple})
 
     elif page == "item":
