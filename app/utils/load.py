@@ -146,7 +146,7 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
 
     if page == "folder":
         for item in os.listdir(os.path.join(destination_folder, folder)):
-            if os.path.isdir(item)
+            if os.path.isdir(item):
                 continue
             elif not (item.endswith(".png" or item.endswith(".jpg") or item.endswith(".jpeg")):
                 continue
