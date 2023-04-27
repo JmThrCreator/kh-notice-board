@@ -148,7 +148,7 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
         for item in os.listdir(os.path.join(destination_folder, folder)):
             if os.path.isdir(item):
                 continue
-            elif not (item.endswith(".png" or item.endswith(".jpg") or item.endswith(".jpeg")):
+            elif not (item.endswith(".png") or item.endswith(".jpg") or item.endswith(".jpeg")):
                 continue
             # skip item if it contains a page number that isn't 1
             multiple = False
