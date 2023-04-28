@@ -19,7 +19,7 @@ def sort_by_date(items, folder, reverse=False):
 
     items = sorted(items, key=lambda x: x["time"])
 
-    if reverse:
+    if reverse == False:
         items.reverse()
     
     return items
