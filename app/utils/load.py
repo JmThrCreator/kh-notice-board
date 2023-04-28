@@ -6,191 +6,185 @@ from app.utils.sort import sort_by_date, sort_by_order
 from config import basedir
 from sys import platform
 
-# copies folders into destination folder
+SUPPORTED_IMAGE_FILES = (".jpg", ".jpeg", ".png")
 
 def load_folders():
 
-    # deletes destination folder (static/upload)
+    # Refresh destination folder
+
     if os.path.exists(destination_folder):
         shutil.rmtree(destination_folder)
     else:
         os.mkdir(destination_folder)
 
-    # copies all items from source to destination
-    shutil.copytree(source_folder, destination_folder, copy_function=copy2)
+    # Copy items
 
-    # removes items that are not jpegs or pngs and converts pdfs to jpegs
+    shutil.copytree(
+        source_folder, destination_folder, copy_function=copy2)
+    
+    # Parse source folder
+
     for folder in os.listdir(destination_folder):
 
-        # delete item if it's a file
+        # Delete files in the top directory
+
         if not os.path.isdir(os.path.join(destination_folder, folder)):
             os.remove(os.path.join(destination_folder, folder))
             continue
+        
+        # Load files
 
-        for item in os.listdir(os.path.join(destination_folder, folder)):
-            if item.endswith(".pdf"):
-                convert_pdf(os.path.join(destination_folder, folder, item))
-                os.remove(os.path.join(destination_folder, folder, item))
-            elif item.endswith(".jpg") or item.endswith(".jpeg"):
-                page_name = f"--page_number_1--.jpg"
-                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
-            elif item.endswith(".png"):
-                page_name = f"--page_number_1--.png"
-                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
-            else:
-                os.remove(os.path.join(destination_folder, folder, item))
+        load_files(folder)
 
-    if os.path.exists(destination_folder) == False:
-        os.mkdir(destination_folder)
-
-# loads single folder
 
 def load_folder(folder):
 
     destination_sub_folder = os.path.join(destination_folder, folder)
     source_sub_folder = os.path.join(source_folder, folder)
 
-    # deletes destination folder (static/upload/{sub_folder})
+    # Refresh destination sub-folder
+
     if os.path.exists(destination_sub_folder):
         shutil.rmtree(destination_sub_folder)
 
-    # copies all items from source to destination
+    # Copy items
+
     shutil.copytree(source_sub_folder, destination_sub_folder, copy_function=copy2)
 
-    # removes items that are not jpegs or pngs and converts pdfs to jpegs
-    for item in os.listdir(os.path.join(destination_sub_folder)):
-        if item.endswith(".pdf"):
-            convert_pdf(os.path.join(destination_sub_folder, item))
-            os.remove(os.path.join(destination_sub_folder, item))
-        elif item.endswith(".jpg") or item.endswith(".jpeg"):
-            page_name = f"--page_number_1--.jpg"
-            os.rename(os.path.join(destination_sub_folder, item), os.path.join(destination_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
-        elif item.endswith(".png"):
-            page_name = f"--page_number_1--.png"
-            os.rename(os.path.join(destination_sub_folder, item), os.path.join(destination_sub_folder, item.split("/")[-1].split(".")[0] + page_name))
+    # Load files
+
+    load_files(destination_sub_folder)
+
+def load_files(folder):
+
+    for item in os.listdir(os.path.join(destination_folder, folder)):
+
+        item_path = (os.path.join(destination_folder, folder, item))
+        item_name = os.path.splitext(item_path)[0]
+        file_extension = os.path.splitext(item_path)[1]
+
+        if file_extension == ".pdf":
+            convert_pdf(item_path, item_name, folder)
+            os.remove(item_path)
+
+        elif file_extension in SUPPORTED_IMAGE_FILES:
+            item_name = f"{item_name}--page_number_1--{file_extension}"
+            os.rename(
+                item_path, os.path.join(destination_folder, folder, item_name))
+            
         else:
-            os.remove(os.path.join(destination_sub_folder, item))
+            os.remove(item_path)
 
-    if os.path.exists(destination_sub_folder) == False:
-        os.mkdir(destination_sub_folder)
+def convert_pdf(item_path, item_name, folder):
+    
+    # Convert PDF to JPG
 
-# converts pdf to jpeg
-
-def convert_pdf(item):
     if platform == "linux":
-        converted_file = convert_from_path(item)
+        converted_file = convert_from_path(item_path)
+
     elif platform == "win32":
         poppler_path = os.path.join(basedir, "app", "utils", "modules", "poppler", "Library", "bin")
-        converted_file = convert_from_path(item, poppler_path=poppler_path)
+        converted_file = convert_from_path(item_path, poppler_path=poppler_path)
 
-    # saves converted file to destination folder
-    for count, page in enumerate(converted_file):
-        page_name = f"--page_number_{count+1}--.jpg"
-        if platform == "linux":
-            page.save(os.path.join(destination_folder, item + page_name))
-        elif platform == "win32":
-            page.save(os.path.join(destination_folder, item.split("/")[-1].split(".")[0] + page_name))
+    # Save file
+    
+    for count, page in enumerate(converted_file, start=1):
+        new_item_name = f"{item_name}--page_number_{count}--.jpg"
 
-# returns image width
+        page.save(os.path.join(destination_folder, folder, new_item_name))
 
 def get_width(item, folder, size=1):
+    
     image = PIL.Image.open(os.path.join(destination_folder, folder, item))
     width, height = image.size
-    perimiter = 546.82*size
+    perimeter = 546.82*size
+
     if width > height:
-        ratio = width/height
-        height = (ratio-1)*perimiter
-        width = perimiter-height
+        height = (width / height - 1) * perimeter
+        width = perimeter - height
     elif width < height:
-        ratio = height/width
-        width = (ratio-1)*perimiter
+        width = (height / width - 1) * perimeter
+        height = perimeter - width
     else:
-        width = perimiter/2
+        width = perimeter / 2
+
     return width
-
-# returns pages
-
+                               
 def get_pages(folder, text):
+
     pages = []
+
     for page in os.listdir(os.path.join(destination_folder, folder)):
         try:
             if page.split("--page_number_")[0] == text:
-                width = get_width(page, folder=folder, size=3)
-                pages.append({"name":page, "width":width, "text":text})
+                width = get_width(
+                    page, folder=folder, size=3)
+                
+                pages.append(
+                    {"name": page, "width": width, "text": text})
         except:
-            pass
+            continue
     return pages
 
-# returns list of items in destination folder
-
 def get_folders():
+
     if not os.path.exists(destination_folder):
         os.mkdir(destination_folder)
     return os.listdir(destination_folder)
 
-# returns True if item has multiple pages
-
 def is_page_multiple(item, folder):
+
     count = 0
     for item_check in os.listdir(os.path.join(destination_folder, folder)):
         if item_check.split("--page_number_")[0] == item.split("--page_number_")[0]:
             count += 1
-    if count > 1: return True
+            
+    if count > 1: 
+        return True
     return False
-
-# returns list of items in folder
 
 def get_items(folder=None, item=None, page="folder", sort_by="name"):
 
     items = []
 
     if page == "folder":
+
         for item in os.listdir(os.path.join(destination_folder, folder)):
-            if os.path.isdir(item):
+
+            if os.path.isdir(item) or not item.endswith(SUPPORTED_IMAGE_FILES):
                 continue
-            elif not (item.endswith(".png") or item.endswith(".jpg") or item.endswith(".jpeg")):
+
+            # Skip item if it isn't the first page
+
+            page_number = int(item.split("--page_number_")[1][0])
+
+            if page_number != 1:
                 continue
-            # skip item if it contains a page number that isn't 1
-            multiple = False
-            try:
-                page_number = int(item.split("--page_number_")[1][0])
-                if page_number == 1:
-                    width = get_width(item, folder=folder, size=1)
-                    text = item.split("--page_number_1--")[0]
-                    multiple = is_page_multiple(item=item, folder=folder)
-                else:
-                   continue
-            except:
-                width = get_width(item, folder=folder, size=1)
-                if item.endswith(".png"):
-                    text = item.split(".png")[0]
-                elif item.endswith(".jpg"):
-                    text = item.split(".jpg")[0]
-                else:
-                    text = item.split(".jpeg")[0]
+
+            width = get_width(item, folder=folder, size=1)
+            text = item.split("--page_number_1--")[0]
+            multiple = is_page_multiple(item=item, folder=folder)
+
             items.append({"name":item, "width":width, "text":text, "multiple":multiple})
 
     elif page == "item":
-        try:
-            text = item.split("--page_number_1--")[0]
-            page_number = int(item.split("--page_number_")[1][0])
-            if page_number == 1:
-                items = get_pages(folder, text)
-        except:
-            if item.endswith(".png"):
-                text = item.split(".png")[0]
-            else:
-                text = item.split(".jpg")[0]
-            width = get_width(item, folder=folder, size=3)
-            items.append({"name":item, "width":width, "text":text})    
 
-    # sorts items by date, name, or order
-    if sort_by == "date_ascending":
-        items = sort_by_date(items, folder)
-        items.reverse()
-    if sort_by == "date_descending":
-        items = sort_by_date(items, folder)
-    elif sort_by == "order":
-        items = sort_by_order(items)
+
+        text = item.split("--page_number_1--")[0]
+        page_number = int(item.split("--page_number_")[1][0])
+        
+        if page_number == 1:
+            items = get_pages(folder, text)
+
+    # Item sort
+
+    SORT_FUNCTIONS = {
+        "date_ascending": sort_by_date(items, folder),
+        "date_descending": sort_by_date(items, folder, reverse=True),
+        "order": sort_by_order(items)
+    }
+
+    if sort_by in SORT_FUNCTIONS:
+        items = SORT_FUNCTIONS[sort_by]
 
     return items
