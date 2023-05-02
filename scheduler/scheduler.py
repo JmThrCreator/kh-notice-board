@@ -10,7 +10,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 basedir = os.path.dirname(basedir)
 
 load_dotenv()
-SOURCE_FOLDER = os.get_env("SOURCE_PATH")
+SOURCE_FOLDER = os.getenv("SOURCE_PATH")
 DESTINATION_FOLDER = os.path.join(basedir, "app", "static", "upload", "")
 
 SUPPORTED_IMAGE_FILES = (".jpg", ".jpeg", ".png")
