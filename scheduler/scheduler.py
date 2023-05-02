@@ -2,82 +2,83 @@ import os, shutil, configparser
 from shutil import copy2
 from pdf2image import convert_from_path
 from sys import platform
+from dotenv import load_dotenv
 
-# get data from config.ini
+# get data from .env
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 basedir = os.path.dirname(basedir)
 
-def get_config():
-    config = configparser.ConfigParser()
-    config_file_path = os.path.join(basedir, "config.ini")
-    config.read(config_file_path)
-    return config
+load_dotenv()
+SOURCE_FOLDER = os.get_env("SOURCE_PATH")
+DESTINATION_FOLDER = os.path.join(basedir, "app", "static", "upload", "")
 
-# get source folder
-
-config = get_config()
-source_folder = config.get("source file location", "source")
-
-# get destination folder
-
-destination_folder = os.path.join(basedir, "app", "static", "upload", "")
-
-
-# copies folders into destination folder
+SUPPORTED_IMAGE_FILES = (".jpg", ".jpeg", ".png")
 
 def load_folders():
 
-    # deletes destination folder (static/upload)
-    if os.path.exists(destination_folder):
-        shutil.rmtree(destination_folder)
+    # Refresh destination folder
+
+    if os.path.exists(DESTINATION_FOLDER):
+        shutil.rmtree(DESTINATION_FOLDER)
     else:
-        os.mkdir(destination_folder)
+        os.mkdir(DESTINATION_FOLDER)
 
-    # copies all items from source to destination
-    shutil.copytree(source_folder, destination_folder, copy_function=copy2)
+    # Copy items
 
-    # removes items that are not jpegs or pngs and converts pdfs to jpegs
-    for folder in os.listdir(destination_folder):
+    shutil.copytree(
+        SOURCE_FOLDER, DESTINATION_FOLDER, copy_function=copy2)
+    
+    # Parse source folder
 
-        # delete item if it's a file
-        if not os.path.isdir(os.path.join(destination_folder, folder)):
-            os.remove(os.path.join(destination_folder, folder))
+    for folder in os.listdir(DESTINATION_FOLDER):
+
+        # Delete files in the top directory
+
+        if not os.path.isdir(os.path.join(DESTINATION_FOLDER, folder)):
+            os.remove(os.path.join(DESTINATION_FOLDER, folder))
             continue
+        
+        # Load files
 
-        for item in os.listdir(os.path.join(destination_folder, folder)):
-            if item.endswith(".pdf"):
-                convert_pdf(os.path.join(destination_folder, folder, item))
-                os.remove(os.path.join(destination_folder, folder, item))
-            elif item.endswith(".jpg") or item.endswith(".jpeg"):
-                page_name = f"--page_number_1--.jpg"
-                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
-            elif item.endswith(".png"):
-                page_name = f"--page_number_1--.png"
-                os.rename(os.path.join(destination_folder, folder, item), os.path.join(destination_folder, folder, item.split("/")[-1].split(".")[0] + page_name))
-            else:
-                os.remove(os.path.join(destination_folder, folder, item))
+        load_files(folder)
 
-    if os.path.exists(destination_folder) == False:
-        os.mkdir(destination_folder)
+def load_files(folder):
 
-# converts pdf to jpeg
+    for item in os.listdir(os.path.join(DESTINATION_FOLDER, folder)):
 
-def convert_pdf(item):
+        item_path = (os.path.join(DESTINATION_FOLDER, folder, item))
+        item_name = os.path.splitext(item_path)[0]
+        file_extension = os.path.splitext(item_path)[1]
+
+        if file_extension == ".pdf":
+            convert_pdf(item_path, item_name, folder)
+            os.remove(item_path)
+
+        elif file_extension in SUPPORTED_IMAGE_FILES:
+            item_name = f"{item_name}--page_number_1--{file_extension}"
+            os.rename(
+                item_path, os.path.join(DESTINATION_FOLDER, folder, item_name))
+            
+        else:
+            os.remove(item_path)
+
+def convert_pdf(item_path, item_name, folder):
+    
+    # Convert PDF to JPG
+
     if platform == "linux":
-        converted_file = convert_from_path(item)
+        converted_file = convert_from_path(item_path)
+
     elif platform == "win32":
         poppler_path = os.path.join(basedir, "app", "utils", "modules", "poppler", "Library", "bin")
-        converted_file = convert_from_path(item, poppler_path=poppler_path)
-    else:
-        return
+        converted_file = convert_from_path(item_path, poppler_path=poppler_path)
 
-    # saves converted file to destination folder
-    for count, page in enumerate(converted_file):
-        page_name = f"--page_number_{count+1}--.jpg"
-        if platform == "linux":
-            page.save(os.path.join(destination_folder, item + page_name))
-        elif platform == "win32":
-            page.save(os.path.join(destination_folder, item.split("/")[-1].split(".")[0] + page_name))
+    # Save file
+    
+    for count, page in enumerate(converted_file, start=1):
+        new_item_name = f"{item_name}--page_number_{count}--.jpg"
+
+        page.save(os.path.join(DESTINATION_FOLDER, folder, new_item_name))
 
 load_folders()

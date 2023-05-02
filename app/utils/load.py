@@ -1,7 +1,7 @@
 import os, shutil, PIL
 from shutil import copy2
 from pdf2image import convert_from_path
-from app.utils.info import source_folder, destination_folder
+from app.utils.info import SOURCE_FOLDER, DESTINATION_FOLDER
 from app.utils.sort import sort_by_date, sort_by_order
 from config import basedir
 from sys import platform
@@ -12,24 +12,24 @@ def load_folders():
 
     # Refresh destination folder
 
-    if os.path.exists(destination_folder):
-        shutil.rmtree(destination_folder)
+    if os.path.exists(DESTINATION_FOLDER):
+        shutil.rmtree(DESTINATION_FOLDER)
     else:
-        os.mkdir(destination_folder)
+        os.mkdir(DESTINATION_FOLDER)
 
     # Copy items
 
     shutil.copytree(
-        source_folder, destination_folder, copy_function=copy2)
+        SOURCE_FOLDER, DESTINATION_FOLDER, copy_function=copy2)
     
     # Parse source folder
 
-    for folder in os.listdir(destination_folder):
+    for folder in os.listdir(DESTINATION_FOLDER):
 
         # Delete files in the top directory
 
-        if not os.path.isdir(os.path.join(destination_folder, folder)):
-            os.remove(os.path.join(destination_folder, folder))
+        if not os.path.isdir(os.path.join(DESTINATION_FOLDER, folder)):
+            os.remove(os.path.join(DESTINATION_FOLDER, folder))
             continue
         
         # Load files
@@ -39,8 +39,8 @@ def load_folders():
 
 def load_folder(folder):
 
-    destination_sub_folder = os.path.join(destination_folder, folder)
-    source_sub_folder = os.path.join(source_folder, folder)
+    destination_sub_folder = os.path.join(DESTINATION_FOLDER, folder)
+    source_sub_folder = os.path.join(SOURCE_FOLDER, folder)
 
     # Refresh destination sub-folder
 
@@ -57,9 +57,9 @@ def load_folder(folder):
 
 def load_files(folder):
 
-    for item in os.listdir(os.path.join(destination_folder, folder)):
+    for item in os.listdir(os.path.join(DESTINATION_FOLDER, folder)):
 
-        item_path = (os.path.join(destination_folder, folder, item))
+        item_path = (os.path.join(DESTINATION_FOLDER, folder, item))
         item_name = os.path.splitext(item_path)[0]
         file_extension = os.path.splitext(item_path)[1]
 
@@ -70,7 +70,7 @@ def load_files(folder):
         elif file_extension in SUPPORTED_IMAGE_FILES:
             item_name = f"{item_name}--page_number_1--{file_extension}"
             os.rename(
-                item_path, os.path.join(destination_folder, folder, item_name))
+                item_path, os.path.join(DESTINATION_FOLDER, folder, item_name))
             
         else:
             os.remove(item_path)
@@ -91,11 +91,11 @@ def convert_pdf(item_path, item_name, folder):
     for count, page in enumerate(converted_file, start=1):
         new_item_name = f"{item_name}--page_number_{count}--.jpg"
 
-        page.save(os.path.join(destination_folder, folder, new_item_name))
+        page.save(os.path.join(DESTINATION_FOLDER, folder, new_item_name))
 
 def get_width(item, folder, size=1):
     
-    image = PIL.Image.open(os.path.join(destination_folder, folder, item))
+    image = PIL.Image.open(os.path.join(DESTINATION_FOLDER, folder, item))
     width, height = image.size
     perimeter = 546.82*size
 
@@ -114,7 +114,7 @@ def get_pages(folder, text):
 
     pages = []
 
-    for page in os.listdir(os.path.join(destination_folder, folder)):
+    for page in os.listdir(os.path.join(DESTINATION_FOLDER, folder)):
         try:
             if page.split("--page_number_")[0] == text:
                 width = get_width(
@@ -128,14 +128,14 @@ def get_pages(folder, text):
 
 def get_folders():
 
-    if not os.path.exists(destination_folder):
-        os.mkdir(destination_folder)
-    return os.listdir(destination_folder)
+    if not os.path.exists(DESTINATION_FOLDER):
+        os.mkdir(DESTINATION_FOLDER)
+    return os.listdir(DESTINATION_FOLDER)
 
 def is_page_multiple(item, folder):
 
     count = 0
-    for item_check in os.listdir(os.path.join(destination_folder, folder)):
+    for item_check in os.listdir(os.path.join(DESTINATION_FOLDER, folder)):
         if item_check.split("--page_number_")[0] == item.split("--page_number_")[0]:
             count += 1
             
@@ -149,7 +149,7 @@ def get_items(folder=None, item=None, page="folder", sort_by="name"):
 
     if page == "folder":
 
-        for item in os.listdir(os.path.join(destination_folder, folder)):
+        for item in os.listdir(os.path.join(DESTINATION_FOLDER, folder)):
 
             if os.path.isdir(item) or not item.endswith(SUPPORTED_IMAGE_FILES):
                 continue

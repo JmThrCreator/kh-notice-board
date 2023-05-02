@@ -5,8 +5,8 @@ from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 import os, platform
-from app.utils.info import get_config
 from sys import platform
+from dotenv import load_dotenv
 
 # create app
 
@@ -46,8 +46,8 @@ from app import models
 
 # runs window if not in developer mode
 
-config = get_config()
-if config.get("developer mode", "developer") == "0":
+load_dotenv()
+if os.getenv("LOAD_CHROME") == "true":
     if platform == "linux":
         os.system("google-chrome-stable -kiosk -app=http://127.0.0.1:5000/ &")
     elif platform == "win32":
