@@ -33,5 +33,5 @@ def sort_by_order(items):
         except:
             pass
     else:
-        return sorted(items, key=lambda x: int(item.get("name").split("--")[1][-1]))
+        return sorted(items, key=lambda item: int(item.get("name").split("--")[1][-1]))
     
