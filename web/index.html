@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-        <title>Notice Board</title>
-		<meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	</head>
-<body>
-<form action="/" method="post">
-    <div class="container">      
-        <div class="notice-header">
-            <h1 class="notice-title">Notice Board</h1>
-        </div>
-        
-        <div class="folders-grid">
-            {{folders}}
-            <!--
-            <button onclick="showLoad(id)" id="{{folder}}" type="submit" class="folder-button" name="{{folder}}">
-                <h3>{{folder}}</h3>
-            </button>
-            -->
-        </div>
-    </div>
-</form>
 
+<head>
+    <title>Notice Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<script>
+    function loadFolder(folderId) {
+        fetch(`/folder?name=${encodeURIComponent(folderId)}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("items").innerHTML = html;
+            })
+            .catch(err => {
+                console.log("Error:", err);
+            });
+    }
+</script>
+    
+<body>
+<div class="container" id="content">      
+    <div class="notice-header">
+        <h1 class="notice-title">Notice Board</h1>
+    </div>
+    
+    <div class="items-grid" id="items">
+        {{items}}
+    </div>
+</div>
 </body>
+
 <style>
     html,
     body {
@@ -62,7 +70,7 @@
         color: #1f2937;
     }
 
-    .folders-grid {
+    .items-grid {
         margin-top: 5rem;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -85,6 +93,6 @@
         padding: 1.25rem;
         z-index: 100;
     }
-
 </style>
+
 </html>

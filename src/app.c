@@ -31,7 +31,7 @@ static void event_handler(struct mg_connection *connection, int event, void *eve
                 char *cache_dir = cache_dir_list->paths[i].name;
                 char button[512];
                 snprintf(button, sizeof(button),
-                    "<button onclick=\"showLoad(id)\" id=\"%s\" type=\"submit\" class=\"folder-button\" name=\"%s\">\n"
+                    "<button onclick=\"loadFolder(id)\" id=\"%s\" class=\"folder-button\" name=\"%s\">\n"
                     "  <h3>%s</h3>\n"
                     "</button>\n",
                     cache_dir, cache_dir, cache_dir);
@@ -42,12 +42,51 @@ static void event_handler(struct mg_connection *connection, int event, void *eve
             PlaceholderList placeholders = {
                 .count = 1,
                 .items = (Placeholder[]) {
-                    { "{{folders}}", buttons },
+                    { "{{items}}", buttons },
                 }
             };
             char html_path[PATH_LENGTH];
 			snprintf(html_path, sizeof(html_path), "%s/index.html", web_path);
             serve_html(connection, html_path, &placeholders);
+            free(buttons);
+        }
+
+        // FOLDER
+        else if (mg_match(hm->uri, mg_str("/folder"), NULL)) {
+            // folder name
+            char var[SUFFIX_LENGTH] = "";
+            mg_http_get_var(&hm->query, "name", var, sizeof(var));
+            char folder_name[SUFFIX_LENGTH] = "";
+            mg_url_decode(var, sizeof(var), folder_name, sizeof(var), 0);
+
+            // folder list
+            char cache_path[PATH_LENGTH];
+	        setup_cache(cache_path);
+            char folder_path[PATH_LENGTH];
+            strcpy(folder_path, cache_path);
+            strcat(folder_path, "/");
+            strcat(folder_path, folder_name);
+            PathList *folder_dir_list = create_path_list(folder_path, false);
+
+            char *buttons = malloc(512*folder_dir_list->count);
+            if (!buttons) return;
+            buttons[0] = '\0';
+
+            for (int i = 0; i < folder_dir_list->count; i++) {
+                char *file_name = folder_dir_list->paths[i].name;
+                printf("%s", file_name);
+                char button[512];
+                snprintf(button, sizeof(button),
+                    "<button onclick=\"loadFolder(id)\" id=\"%s\" class=\"folder-button\" name=\"%s\">\n"
+                    "  <h3>%s</h3>\n"
+                    "</button>\n",
+                    file_name, file_name, file_name);
+
+                strcat(buttons, button);
+            }
+
+            mg_http_reply(connection, 200, "Content-Type: text/plain\r\n", buttons);
+            free(buttons); 
         }
 		/*
         else if (hm->uri.len == 4 && strncmp(hm->uri.buf, "/api", 4) == 0) {
@@ -59,7 +98,7 @@ static void event_handler(struct mg_connection *connection, int event, void *eve
         else {
             mg_http_reply(
 				connection, 404, "Content-Type: text/html\r\n", 
-                "<h1>404 Not Found</h1><p>Page not found.</p>");
+                "<h1>404 Not Found</h1>pPage not found.</p>");
         }
     }
 }
