@@ -1,0 +1,4 @@
+.vscode/
+example-input/*
+.DS_store
+!.gitkeep

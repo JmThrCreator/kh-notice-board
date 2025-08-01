@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <title>Notice Board</title>
+		<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	</head>
+<body>
+<form action="/" method="post">
+    <div class="container">      
+        <div class="notice-header">
+            <h1 class="notice-title">Notice Board</h1>
+        </div>
+        
+        <div class="folders-grid">
+            {{folders}}
+            <!--
+            <button onclick="showLoad(id)" id="{{folder}}" type="submit" class="folder-button" name="{{folder}}">
+                <h3>{{folder}}</h3>
+            </button>
+            -->
+        </div>
+    </div>
+</form>
+
+</body>
+<style>
+    html,
+    body {
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    }
+
+    body {
+    background-color: #f3f5f7;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    }
+
+    body::-webkit-scrollbar {
+    display: none;
+    }
+
+    .container {
+        margin: auto;
+        max-width: 96rem;
+        padding: 2.5rem;
+        position: relative;
+    }
+
+    .notice-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .notice-title {
+        font-weight: bold;
+        font-size: 1.875rem;
+        color: #1f2937;
+    }
+
+    .folders-grid {
+        margin-top: 5rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+        align-items: center;
+    }
+
+    .folder-button {
+        background-color: white;
+        outline: none;
+        height: 8rem;
+        display: flex;
+        align-items: flex-end;
+        border-radius: 0.75rem;
+        border: 1px solid #cbd5e1;
+        cursor: pointer;
+        color: #1f2937;
+        font-weight: bold;
+        font-size: 1.25rem;
+        padding: 1.25rem;
+        z-index: 100;
+    }
+
+</style>
+</html>
