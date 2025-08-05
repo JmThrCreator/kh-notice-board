@@ -2,6 +2,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 #include <unistd.h> // fork, wait
 #include <sys/types.h> // pid_t
@@ -18,6 +19,13 @@ typedef struct {
 	  char path_name[PATH_LENGTH];
 	  UT_hash_handle hh;
 } PathNameHashEntry;
+
+void trim_whitespace(char *str) {
+    char *end;
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+    *(end+1) = '\0';
+}
 
 int setup_cache(char cache_path[]) {
 	#ifdef _WIN32
@@ -100,9 +108,15 @@ void update_single_cache_folder(char *cache_path, char *input_dir_path, int *num
 		if (input_file_path->ext == NULL || strstr("jpg,jpeg,png,pdf", input_file_path->ext) == NULL) continue; // filter
 	
 		char cache_file_dir_path[PATH_LENGTH];
+
+		char file_name[SUFFIX_LENGTH];
+		strncpy(file_name, input_file_path->suffix, SUFFIX_LENGTH - 1);
+		file_name[SUFFIX_LENGTH - 1] = '\0';
+		trim_whitespace(file_name);
+
 		snprintf(
 			cache_file_dir_path, sizeof(cache_file_dir_path), "%s/%s/%s",
-			cache_path, basename(input_dir_path), input_file_path->suffix);
+			cache_path, basename(input_dir_path), file_name);
 		safe_mkdir(cache_file_dir_path);
 
 		pid_t pid = fork();
@@ -116,7 +130,7 @@ void update_single_cache_folder(char *cache_path, char *input_dir_path, int *num
 			} else if (strstr("jpg,jpeg,png", input_file_path->ext)) {
 				char cache_file_path[PATH_LENGTH];
 				snprintf(
-					cache_file_path, sizeof(cache_file_path), "%s/%s/%s/1.%s", 
+					cache_file_path, sizeof(cache_file_path), "%s/%s/%s/0.%s", 
 					cache_path, basename(input_dir_path), input_file_path->suffix, input_file_path->ext);
 				copy_file(input_file_path->path, cache_file_path);
 			}

@@ -105,6 +105,36 @@ void copy_file(const char *src_path, const char *out_path) {
 	fclose(out_file);
 }
 
+bool has_multi_files(const char *path) {
+	DIR *dir = opendir(path);
+    if (!dir) {
+        perror("opendir");
+        return false;
+    }
+
+	struct dirent *entry;
+    int count = 0;
+	char full_path[PATH_LENGTH];
+
+    while ((entry = readdir(dir)) != NULL) {
+		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+			continue;
+
+		snprintf(full_path, PATH_LENGTH, "%s/%s", path, entry->d_name);
+
+        struct stat statbuf;
+        if (stat(full_path, &statbuf) == 0 && S_ISREG(statbuf.st_mode)) {
+            count++;
+			if (count > 1) {
+				closedir(dir);
+				return true;
+			}
+        }
+    }
+	closedir(dir);
+	return false;
+}
+
 // path list
 
 void free_path_list(PathList *path_list) {
@@ -141,10 +171,12 @@ PathList *create_path_list(const char *dir_path, bool dirs_only) {
 	char full_path[PATH_LENGTH];
 	
 	while ((entry = readdir(dir)) != NULL) {
-		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
+		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+			continue;
 
 		snprintf(full_path, PATH_LENGTH, "%s/%s", dir_path, entry->d_name);
-		if (dirs_only && !is_dir(full_path)) continue;
+		if (dirs_only && !is_dir(full_path))
+			continue;
 
 		// resize
 		if (path_list->count >= path_list->capacity) {

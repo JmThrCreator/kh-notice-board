@@ -5,79 +5,44 @@
     <title>Notice Board</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 
 <script>
-    function loadFolder(folderId) {
-        fetch(`/folder?name=${encodeURIComponent(folderId)}`)
+    function refresh(id) {
+        runSpinner(id);
+        fetch("/?refresh=true")
             .then(response => response.text())
             .then(html => {
-                document.getElementById("items").innerHTML = html;
-            })
-            .catch(err => {
-                console.log("Error:", err);
+                document.open();
+                document.write(html);
+                document.close();
             });
+    }
+
+    function loadFolder(folderId) {
+        let url = `/folder?name=${encodeURIComponent(folderId)}`;
+        window.location.href = url;
     }
 </script>
     
 <body>
-<div class="container" id="content">      
-    <div class="notice-header">
-        <h1 class="notice-title">Notice Board</h1>
+<div class="container" id="content">
+    <button onclick="refresh(id)" type="button" id="refresh" name="refresh">
+        <img src="assets/refresh.svg" class="size-5" />
+    </button>
+
+    <div class="header">
+        <h1 class="title">Notice Board</h1>
     </div>
-    
     <div class="items-grid" id="items">
-        {{items}}
+        {{ placeholder }}
     </div>
 </div>
 </body>
 
 <style>
-    html,
-    body {
-    padding: 0;
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    }
-
-    body {
-    background-color: #f3f5f7;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    }
-
-    body::-webkit-scrollbar {
-    display: none;
-    }
-
-    .container {
-        margin: auto;
-        max-width: 96rem;
-        padding: 2.5rem;
-        position: relative;
-    }
-
-    .notice-header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .notice-title {
-        font-weight: bold;
-        font-size: 1.875rem;
-        color: #1f2937;
-    }
-
-    .items-grid {
-        margin-top: 5rem;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2.5rem;
-        align-items: center;
-    }
-
     .folder-button {
         background-color: white;
         outline: none;
@@ -91,7 +56,6 @@
         font-weight: bold;
         font-size: 1.25rem;
         padding: 1.25rem;
-        z-index: 100;
     }
 </style>
 

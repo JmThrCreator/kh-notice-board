@@ -33,6 +33,7 @@ int is_dir(const char *path);
 int safe_mkdir(char *path);
 int clear_dir(char *path);
 void copy_file(const char *src_path, const char *out_path);
+bool has_multi_files(const char *path);
 void free_path_list(PathList *path_list);
 PathList *create_path_list(const char *dir_path, bool dirs_only);
 int test_fs_utils(int argc, char *argv[]);

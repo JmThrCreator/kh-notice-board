@@ -107,3 +107,10 @@ void serve_html(struct mg_connection *connection, char* path, const PlaceholderL
     }
     free(html);
 }
+
+void serve_error(struct mg_connection *connection, char* web_path) {
+    char html_path[PATH_LENGTH];
+    snprintf(html_path, sizeof(html_path), "%s/error.html", web_path);
+    PlaceholderList placeholders = {0};
+    serve_html(connection, html_path, &placeholders);
+}

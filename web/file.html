@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Notice Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<script>
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        loadImages();
+    });
+
+    function loadImages() {
+        const container = document.getElementById("items");
+        container.querySelectorAll('img.page').forEach((img) => {
+            if (img.complete && img.naturalWidth !== 0) {
+                resizeImage(img, 3);
+            } else {
+                img.onload = () => resizeImage(img, 3);
+            }
+        });
+    }
+</script>
+    
+<body>
+<div class="container" id="content">
+    <button onclick="history.back()" name="back" id="back">
+        <img src="assets/back.svg" class="size-5" />
+    </button>
+
+    <div class="header">
+        <h1 class="title">Notice Board</h1>
+    </div>
+    <div class="pages-grid" id="items">
+        {{ placeholder }}
+    </div>
+</div>
+</body>
+
+<style>
+    .pages-grid {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.25rem;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+    }
+</style>
+
+</html>

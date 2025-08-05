@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS += -Wall -I$(PWD)/include -I$(PWD)/lib $(shell pkg-config --cflags poppler-glib)
+CFLAGS += -Wall -O2 -pthread -I$(PWD)/include -I$(PWD)/lib $(shell pkg-config --cflags poppler-glib)
 LDFLAGS = $(shell pkg-config --libs poppler-glib)
 
 SRC = src/app.c src/cache.c src/fs_utils.c src/pdf_utils.c src/arena.c src/web.c lib/mongoose.c

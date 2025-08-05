@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Notice Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<script>
+    function loadIndex() {
+        window.location.href = "/";
+    }
+</script>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h1 class="title">Page not Found</h1>
+    </div>
+    <div class="content-wrapper">
+        <div class="message">
+            <button onclick="loadIndex()">Click here</button> to return to the main screen
+        </div>
+    </div>
+</div>
+</body>
+
+<style>
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+    gap: 2.5rem;
+}
+
+.message {
+    font-size: 1.5rem;
+    color: #1f2937;
+}
+
+button {
+    background-color: white;
+    padding: 0.5rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #9ca3af;
+    font-weight: bold;
+    color: #1f2937;
+    cursor: pointer;
+    font-size: inherit;
+}
+</style>
+</html>
+

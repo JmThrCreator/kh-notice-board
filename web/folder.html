@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Notice Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<script>
+    function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadImages();
+    });
+
+    function loadImages() {
+        const container = document.getElementById("items");
+
+        container.querySelectorAll('img.thumbnail').forEach((img) => {
+            if (img.complete && img.naturalWidth !== 0) {
+                resizeImage(img, 1);
+            } else {
+                img.onload = () => resizeImage(img, 1);
+            }
+        });
+        
+        // size multi-file indicator
+        document.querySelectorAll('.file-container').forEach((container) => {
+            const thumbnail = container.querySelector('img.thumbnail');
+            const indicator = container.querySelector('.multi-page-indicator');
+            const text = container.querySelector('p');
+            if (!thumbnail || !indicator) return;
+
+            const applySizes = () => {
+                resizeImage(thumbnail, 1);
+                indicator.style.width = thumbnail.style.width;
+                indicator.style.height = thumbnail.style.height;
+                text.style.marginTop = "3rem";
+            };
+
+            if (thumbnail.complete && thumbnail.naturalWidth !== 0) {
+                applySizes();
+            } else {
+                thumbnail.onload = applySizes;
+            }
+        });
+    }
+
+    function refresh(id) {
+        runSpinner(id);
+        const folderId = getQueryParam("name");
+        fetch(`/folder?name=${folderId}&refresh=true`)
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+            });
+        loadImages();
+    }
+
+    function loadFile(fileId) {
+        let url = `/file?name=${encodeURIComponent(fileId)}`;
+        window.location.href = url;
+    }
+</script>
+    
+<body>
+<div class="container" id="content">
+    <button onclick="history.back()" name="back" id="back">
+        <img src="assets/back.svg" class="size-5" />
+    </button>
+    <button onclick="refresh(id)" type="button" id="refresh" name="refresh">
+        <img src="assets/refresh.svg" class="size-5" />
+    </button>
+
+    <div class="header">
+        <h1 class="title">Notice Board</h1>
+    </div>
+    <div class="items-grid" id="items">
+        {{ placeholder }}
+    </div>
+</div>
+</body>
+
+<style>
+    .file-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .file-button {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: none;
+    }
+
+    .file-button img {
+        border: 1px solid #9CA3AF;
+        border-radius: 0.75rem;
+    }
+
+    .file-container p {
+        font-weight: bold;
+        font-size: 1.15rem;
+        color: #1F2937;
+        position: relative;
+        margin-top: 2rem;
+    }
+
+    .multi-page-indicator {
+        position: absolute;
+        z-index: -1;
+        border-radius: 0.75rem;
+        background-color: rgb(248, 248, 248);
+        margin-left: 1rem;
+        margin-bottom: 3rem;
+        border: 1px solid #9CA3AF;
+    }
+</style>
+
+</html>

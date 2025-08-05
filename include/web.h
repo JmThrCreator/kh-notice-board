@@ -20,3 +20,4 @@ typedef struct {
 char *replace_placeholder(const char *source, const char *placeholder, const char *replacement);
 char *get_web_path(char *argv0);
 void serve_html(struct mg_connection *connection, char* path, const PlaceholderList *placeholders);
+void serve_error(struct mg_connection *connection, char* web_path);

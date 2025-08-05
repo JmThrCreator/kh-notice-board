@@ -1,0 +1,72 @@
+html,
+body {
+padding: 0;
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+	Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+body {
+background-color: #f3f5f7;
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+display: none;
+}
+
+.container {
+	margin: auto;
+	max-width: 96rem;
+	padding: 2.5rem;
+	position: relative;
+}
+
+.header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@keyframes loading {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+.title {
+	font-weight: bold;
+	font-size: 1.875rem;
+	color: #1f2937;
+}
+
+.items-grid {
+	margin-top: 2.5rem;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2.5rem;
+	align-items: center;
+}
+
+#refresh {
+	position: absolute;
+	right: 2.5rem;
+	outline: none;
+	width: 3rem;
+	height: 3rem;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+#back {
+	position: fixed;
+	outline: none;
+	width: 3rem;
+	height: 3rem;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
