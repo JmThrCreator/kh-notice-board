@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Notice Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+</head>
+
+<script>
+    function refresh(id) {
+        runSpinner(id);
+        fetch("/?refresh=true")
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+            });
+    }
+
+    function loadFolder(folderId) {
+        let url = `/folder?name=${encodeURIComponent(folderId)}`;
+        window.location.href = url;
+    }
+</script>
+    
+<body>
+<div class="container" id="content">
+    <button onclick="refresh(id)" type="button" id="refresh" name="refresh">
+	<img src="refresh.svg" class="size-5" />
+    </button>
+
+    <div class="header">
+        <h1 class="title">Notice Board</h1>
+    </div>
+    <div class="items-grid" id="items">
+        {{ placeholder }}
+    </div>
+</div>
+</body>
+
+<style>
+    .folder-button {
+        background-color: white;
+        outline: none;
+        height: 8rem;
+        display: flex;
+        align-items: flex-end;
+        border-radius: 0.75rem;
+        border: 1px solid #cbd5e1;
+        cursor: pointer;
+        color: #1f2937;
+        font-weight: bold;
+        font-size: 1.25rem;
+        padding: 1.25rem;
+    }
+</style>
+
+</html>

@@ -1,0 +1,14 @@
+Diagnostics:
+  Suppress:
+    - misc-definitions-in-headers
+    - drv_argument_not_allowed_with
+CompileFlags:
+  Add:
+    - "-xc"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/lib"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/src"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/lib/mupdf"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/lib/jsmn"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/lib/mongoose"
+    - "-I/Users/jmaggio/Documents/Code/kh-notice-board/gen"
+    - "-std=c11"

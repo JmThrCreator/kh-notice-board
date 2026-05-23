@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+cd "$(dirname "$0")"
+PROJECT_ROOT="$(pwd)"
+CMD=$1
+
+setup() {
+	echo "Generating .clangd..."
+	cat > "$PROJECT_ROOT/.clangd" << EOF
+Diagnostics:
+  Suppress:
+    - misc-definitions-in-headers
+    - drv_argument_not_allowed_with
+CompileFlags:
+  Add:
+    - "-xc"
+    - "-I$PROJECT_ROOT/lib"
+    - "-I$PROJECT_ROOT/src"
+    - "-I$PROJECT_ROOT/lib/mupdf"
+    - "-I$PROJECT_ROOT/lib/jsmn"
+    - "-I$PROJECT_ROOT/lib/mongoose"
+    - "-I$PROJECT_ROOT/gen"
+    - "-std=c11"
+EOF
+	echo "Setup complete"
+}
+
+case "$CMD" in
+	setup)
+		setup
+	;;
+	build)
+		./build/macos.sh
+	;;
+	run)
+		./build/macos.sh
+		./bin/kh-notice-board-macos-arm64
+	;;
+	*)
+		echo "Usage: kh {setup|build|run}"
+		exit 1
+	;;
+esac
