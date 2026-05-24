@@ -1,0 +1,16 @@
+FROM ubuntu:22.04
+
+RUN apt-get update -q && apt-get install -y -q \
+    clang \
+    xxd \
+    gcc-aarch64-linux-gnu \
+    libc6-dev-arm64-cross \
+    libgcc-12-dev-arm64-cross \
+    libc6-arm64-cross \
+    gcc-arm-linux-gnueabihf \
+    libc6-dev-armhf-cross \
+    libgcc-12-dev-armhf-cross \
+    libc6-armhf-cross \
+    libc6-dev
+
+WORKDIR /src

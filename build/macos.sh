@@ -6,8 +6,9 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "building..."
 
-./build/gen_assets.sh
+"$PROJECT_ROOT"/build/gen_assets.sh
 
+# MacOS arm64
 clang -std=c11 -g -Wall -O2 -pthread -Werror -fsanitize=address \
 	-I"$PROJECT_ROOT"/lib -I"$PROJECT_ROOT"/src -I"$PROJECT_ROOT"/gen \
 	-I"$PROJECT_ROOT"/lib/mupdf -I"$PROJECT_ROOT"/lib/jsmn -I"$PROJECT_ROOT"/lib/mongoose \

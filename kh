@@ -32,9 +32,30 @@ case "$CMD" in
 		setup
 	;;
 	build)
+
+	case "$2" in
+	linux)
+		if command -v podman > /dev/null 2>&1; then
+			./build/podman_linux.sh
+		else
+			./build/linux.sh
+		fi
+        ;;
+	macos)
+                ./build/macos.sh
+	;;
+	*)
+		echo "Usage: kh build {linux|macos}"
+		exit 1
+	;;
+        esac
+	;;
+	build)
 		./build/macos.sh
 	;;
+
 	run)
+		# add your build here
 		./build/macos.sh
 		./bin/kh-notice-board-macos-arm64
 	;;

@@ -17,14 +17,14 @@ void open_browser(const char *url) {
 err_t setup_config(path_t *config_path, arena_t *arena) {
 	const char *home = getenv("HOME");
 	if (home == NULL) return ERR;
-	try(path_init(config_path, arena, "", home, "Library", "Application Support", PROJECT_NAME) == ERR);
+	try(path_init(config_path, arena, "", home, "Library", "Application Support", PROJECT_NAME));
 	return create_dir(config_path);
 }
 
 err_t setup_cache(path_t *cache_path, arena_t *arena) {
 	const char *home = getenv("HOME");
 	if (home == NULL) return ERR;
-	try(path_init(cache_path, arena, "", home, "Library", "Caches", PROJECT_NAME) == ERR);
+	try(path_init(cache_path, arena, "", home, "Library", "Caches", PROJECT_NAME));
 	return create_dir(cache_path);
 }
 
