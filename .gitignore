@@ -1,5 +1,6 @@
 # Project
 example_input_hidden/
+bin/*
 
 # Prerequisites
 *.d
