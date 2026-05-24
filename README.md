@@ -42,7 +42,3 @@ Requires [Podman](https://podman.io):
 ```sh
 ./build/podman_linux.sh
 ```
-
-## License
-
-MIT
