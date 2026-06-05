@@ -178,6 +178,7 @@ static void event_handler(struct mg_connection *connection, int event, void *eve
 			path_t *thumbnail = thumbnail_list.items[i];
 			if (!path_exists(thumbnail)) continue;
 
+			// TODO: multi page
 			/*
 	
 			// has multiple pages?
@@ -452,9 +453,6 @@ void app_main() {
 		}
 		break;
 	}
-
-
-
 
 	char *config_text;
 	read_config(&config_file, &scratch, &config_text);

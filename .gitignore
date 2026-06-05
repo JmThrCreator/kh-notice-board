@@ -9,7 +9,7 @@ bin/*
 *.o
 *.ko
 *.obj
-*.elf
+*.elfgit log --oneline -5
 
 # Linker output
 *.ilk
